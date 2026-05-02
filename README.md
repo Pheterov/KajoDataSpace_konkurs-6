@@ -469,7 +469,7 @@ Luka >7 dni między transakcjami tej samej kwoty rozpoczyna nową wyspę.
 
 ## 11. KOD SQL — PEŁNE KWERENDY
 
-Pełne kwerendy znajdują się w osobnych plikach:
+Pełne kwerendy znajdują się w osobnym pliku:
 
 - `01_vw_promo_classification.sql` — widok klasyfikacji wysp yearly
 - `02_vw_fct_clients_v15.sql` — widok klientów z atrybutami pozyskania
@@ -480,6 +480,3 @@ Pełne kwerendy znajdują się w osobnych plikach:
 - `07_signature_proof.sql` — dowód SQL "switch vs displacement"
 
 ---
-
-**KONIEC DOKUMENTU**
-
