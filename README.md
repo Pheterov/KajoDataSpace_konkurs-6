@@ -273,19 +273,23 @@ Dla 15 wysp typu `classic_promo` lub `fomo`:
 
 ### 7.3 Retencja yearly
 
-**Główny insight:** połowa klientów yearly to one-time buyers, niezależnie od kohorty pozyskania.
+**Główny insight:** dominująca większość klientów yearly to one-time buyers — 94.3% w kohorcie new_in_promo_day, 83.0% w kohorcie organic.
 
-**Mediana lifespan dla obu kohort = 0 dni.** To jedyna metryka tej sekcji odporna na arbitralne okna tolerancji i małe próbki.
-Połowa klientów yearly nie wraca po pierwszej transakcji — ani z kohorty pozyskanej w promocji, ani z organic.
+Yearly to produkt one-shot dla obu kohort. Różnica między kohortami: **11.3 pp więcej one-time buyers w kohorcie promocyjnej** — pierwszy ilościowy dowód na hipotezę "łowców okazji" w segmencie yearly, oparty na twardej liczbie (one-time count), nie metryce kohortowej z arbitralnymi oknami tolerancji.
 
 #### Statystyki życia klienta
 
-| Kohorta | n | Avg txn | Median txn | Avg lifespan | Median lifespan | Avg revenue |
-|---|---:|---:|---:|---:|---:|---:|
-| new_in_promo_day | 141 | 1.06 | 1 | 19 dni | **0 dni** | **1 286 zł** |
-| organic | 135 | 1.29 | 1 | 85 dni | **0 dni** | **1 533 zł** |
+| Kohorta | n | One-time | % one-time | Multi-buyers | Avg txn | Avg lifespan | Avg revenue |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| new_in_promo_day | 141 | 133 | **94.3%** | 8 | 1.06 | 19 dni | **1 286 zł** |
+| organic | 135 | 112 | **83.0%** | 23 | 1.29 | 85 dni | **1 533 zł** |
 
-**Różnica LTV: 247 zł = 16% niższe revenue per klient promocyjny.** Liczba twarda, nie zależy od metodologii retencji ani prób.
+**Trzy twarde liczby pokazujące różnicę kohort:**
+- One-time rate: 94.3% vs 83.0% (+11.3 pp w kohorcie promo)
+- Multi-buyers count: 8 vs 23 (kohorta organic ma **2.9x więcej powracających klientów** w wartościach absolutnych)
+- Avg revenue: 1 286 zł vs 1 533 zł (-247 zł, -16% w kohorcie promo)
+
+Wszystkie trzy metryki są odporne na arbitralne okna tolerancji i nie zależą od cutoff dla kohort eligible.
 
 #### Retencja 12-miesięczna
 
@@ -294,30 +298,27 @@ Połowa klientów yearly nie wraca po pierwszej transakcji — ani z kohorty poz
 | new_in_promo_day | 59 | 7 | **11.9%** |
 | organic | 79 | 19 | **24.1%** |
 
-**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej
-(Wilson 95% CI dla promo: [5.9%, 22.8%]; dla organic: [16.0%, 34.7%]) — przedziały ufności nie nakładają się, kierunek efektu jest realny.
+**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej (Wilson 95% CI dla promo: [5.9%, 22.8%]; dla organic: [16.0%, 34.7%]) — przedziały ufności nie nakładają się, kierunek efektu jest realny.
 
-Definicja retencji 12M: klient miał transakcję w oknie [first_date + 335 dni, first_date + 395 dni]. Cutoff kohorty "eligible" uwzględniając ograniczenie right-censored: first_date ≤ 2025-03-31.
+Definicja retencji 12M: klient miał transakcję w oknie [first_date + 335 dni, first_date + 395 dni]. Cutoff kohorty eligible (uwzględniając ograniczenie right-censored): first_date ≤ 2025-03-31.
 
-Pełne liczby dostępne w appendixu, traktowane jako indykatywne, nie jako podstawa decyzji biznesowych.
+#### Horyzonty 18M i 24M — pominięte z prezentacji głównej
+
+Przy próbkach n=6 (24M promo) i n=9 (18M promo) Wilson 95% CI dla 0/6 wynosi [0%, 39%] — statystycznie nieodróżnialne od dowolnej wartości w tym zakresie. Dodatkowo metodologia okna ±30 dni wokół miesiąca N nie pokrywa typowego renewal pattern dla rocznej subskrypcji. Pełne liczby dostępne w appendixu jako materiał indykatywny, nie podstawa decyzji biznesowych.
 
 #### Wnioski o retencji yearly
 
-**Wniosek R2** — segment yearly: klienci pozyskani w promocji mają niższą retencję 12-miesięczną (11.9% vs 24.1%, próbki n=59 vs n=79)
-  oraz niższy revenue per klient (1 286 zł vs 1 533 zł, próbki n=141 vs n=135).
+**Wniosek R2** — segment yearly: klienci pozyskani w promocji mają niższą retencję 12-miesięczną (11.9% vs 24.1%, próbki n=59 vs n=79) oraz niższy revenue per klient (1 286 zł vs 1 533 zł, próbki n=141 vs n=135).
 
 **Wniosek R3** — efekt łowców okazji występuje w segmencie yearly, nie monthly. Dla yearly hipoteza "promocje przyciągają klientów o niższym LTV" potwierdza się dwoma niezależnymi metrykami (retencja 12M, avg revenue).
 
-**Wniosek R4** — yearly to produkt one-shot: niezależnie od kohorty, mediana lifespan = 0 dni. Implikacja: budżet retencyjny dla yearly powinien koncentrować się na momencie pierwszego renewala (12M anniversary),
-  nie na ciągłym engagement w pierwszym roku — pierwszy rok nie generuje dodatkowych transakcji u 50% klientów.
+**Wniosek R4** — yearly to produkt one-shot dla zdecydowanej większości klientów (83-94% one-time rate). Implikacja: budżet retencyjny dla yearly powinien koncentrować się na momencie pierwszego renewala (12M anniversary), nie na ciągłym engagement w pierwszym roku — u przeważającej większości klientów pierwszy rok nie generuje dodatkowych transakcji.
 
 #### Zastrzeżenia metodologiczne
 
 1. Próbki dla horyzontów 18M i 24M zbyt małe (n=6 do n=24) — efekty pokazują kierunek, nie dowód statystyczny.
-2. Sztywne okno ±30 dni wokół anniversary może artefaktualnie zaniżać retencję klientów odnawiających po dłuższej przerwie.
-   Walidacja krzyżowa (cumulative "any txn after N days") daje spójny kierunek ale różne wartości — patrz appendix.
-4. Wnioski R2-R4 oparte głównie na 12M retencji + statystykach życia.
-   Dłuższe horyzonty wymagają dodatkowych ~12 miesięcy obserwacji aby dać wystarczające próbki dla testów istotności.
+2. Sztywne okno ±30 dni wokół anniversary może artefaktualnie zaniżać retencję klientów odnawiających po dłuższej przerwie. Walidacja krzyżowa (cumulative "any txn after N days") daje spójny kierunek, ale różne wartości — patrz appendix.
+3. Wnioski R2-R4 oparte głównie na 12M retencji + statystykach życia. Dłuższe horyzonty wymagają dodatkowych ~12 miesięcy obserwacji, aby dać wystarczające próbki dla testów istotności.
 
 ---
 
