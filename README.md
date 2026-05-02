@@ -284,16 +284,16 @@ Yearly to produkt one-shot dla obu kohort. Różnica między kohortami: **11.3 p
 | new_in_promo_day | 141 | 133 | **94.3%** | 8 | 1.06 | 19 dni | **1 286 zł** |
 | organic | 135 | 112 | **83.0%** | 23 | 1.29 | 85 dni | **1 533 zł** |
 
-**Trzy twarde liczby pokazujące różnicę kohort:**
+**Trzy liczby pokazujące różnicę kohort:**
 - One-time rate: 94.3% vs 83.0% (+11.3 pp w kohorcie promo)
 - Multi-buyers count: 8 vs 23 (kohorta organic ma **2.9x więcej powracających klientów** w wartościach absolutnych)
 - Avg revenue: 1 286 zł vs 1 533 zł (-247 zł, -16% w kohorcie promo)
 
-Wszystkie trzy metryki są odporne na arbitralne okna tolerancji i nie zależą od cutoff dla kohort eligible.
+Powyższe metryki są odporne na arbitralne okna tolerancji i nie zależą od cutoff dla kohort eligible.
 
 #### Retencja 12-miesięczna
 
-| Kohorta | n eligible | Zretencjonowani | Retencja % |
+| Cohort | N eligible | Retention count | Retention % |
 |---|---:|---:|---:|
 | new_in_promo_day | 59 | 7 | **11.9%** |
 | organic | 79 | 19 | **24.1%** |
