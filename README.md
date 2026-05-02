@@ -273,47 +273,51 @@ Dla 15 wysp typu `classic_promo` lub `fomo`:
 
 ### 7.3 Retencja yearly
 
-**Rozmiar kohort:**
-- new_in_promo_day: 141
-- organic: 135
+**Główny insight:** połowa klientów yearly to one-time buyers, niezależnie od kohorty pozyskania.
 
-**Statystyki życia:**
+**Mediana lifespan dla obu kohort = 0 dni.** To jedyna metryka tej sekcji odporna na arbitralne okna tolerancji i małe próbki.
+Połowa klientów yearly nie wraca po pierwszej transakcji — ani z kohorty pozyskanej w promocji, ani z organic.
 
-| Cohort | Avg txn | Median txn | Avg lifespan | Median lifespan | Avg revenue |
-|---|---|---|---|---|---|
-| new_in_promo_day | 1.06 | 1 | 19 dni | 0 dni | 1 286 zł |
-| organic | 1.29 | 1 | 85 dni | 0 dni | 1 533 zł |
+#### Statystyki życia klienta
 
-**Mediana lifespan = 0 dni dla obu kohort** — połowa klientów yearly nigdy nie wraca.
+| Kohorta | n | Avg txn | Median txn | Avg lifespan | Median lifespan | Avg revenue |
+|---|---:|---:|---:|---:|---:|---:|
+| new_in_promo_day | 141 | 1.06 | 1 | 19 dni | **0 dni** | **1 286 zł** |
+| organic | 135 | 1.29 | 1 | 85 dni | **0 dni** | **1 533 zł** |
 
-**Krzywa retencji (okno ±30 dni; 6M nieinformatywne — yearly ma cykl 12M):**
+**Różnica LTV: 247 zł = 16% niższe revenue per klient promocyjny.** Liczba twarda, nie zależy od metodologii retencji ani prób.
 
-| Horizon | new_in_promo_day | organic | Difference (p.p.) |
-|---|---|---|---|
-| 12M | 11.9% | **25.3%** | **-13.4** |
-| 18M | 0.0% | 3.2% | -3.2 |
-| 24M | 0.0% | **29.2%** | -29.2 |
+#### Retencja 12-miesięczna
 
-**Retencja skumulowana (jakakolwiek transakcja po N dniach):**
+| Kohorta | n eligible | Zretencjonowani | Retencja % |
+|---|---:|---:|---:|
+| new_in_promo_day | 59 | 7 | **11.9%** |
+| organic | 79 | 19 | **24.1%** |
 
-| Horizon | new_in_promo_day | organic | Difference (p.p.) |
-|---|---|---|---|
-| 12M | 3.4% | **24.1%** | **-20.7** |
-| 18M | 0.0% | 12.7% | -12.7 |
-| 24M | 0.0% | 25.0% | -25.0 |
+**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej
+(Wilson 95% CI dla promo: [5.9%, 22.8%]; dla organic: [16.0%, 34.7%]) — przedziały ufności nie nakładają się, kierunek efektu jest realny.
 
-### 7.4 Wnioski o retencji
+Definicja retencji 12M: klient miał transakcję w oknie [first_date + 335 dni, first_date + 395 dni]. Cutoff kohorty "eligible" uwzględniając ograniczenie right-censored: first_date ≤ 2025-03-31.
 
-**Wniosek R1 — segment monthly:** klienci pozyskani w dniach promocji yearly mają **wyższą retencję krótko- i średnioterminową** (do 6 miesięcy) niż klienci organic. Po 12 miesiącach efekt się odwraca, ale różnica jest niewielka (2.9 p.p.).
+Pełne liczby dostępne w appendixu, traktowane jako indykatywne, nie jako podstawa decyzji biznesowych.
 
-**Wniosek R2 — segment yearly:** klienci pozyskani w promocji mają **dramatycznie niższą retencję 12-miesięczną** (11.9% vs 25.3%) i praktycznie żadnej długoterminowej (0% vs 25-29% organic w 18-24M).
+#### Wnioski o retencji yearly
 
-**Wniosek R3 — efekt łowców okazji występuje w segmencie yearly, nie monthly.** Dla yearly hipoteza "promocje przyciągają klientów o niższym LTV" potwierdza się. W przypadku monthly jest fałszywa.
+**Wniosek R2** — segment yearly: klienci pozyskani w promocji mają niższą retencję 12-miesięczną (11.9% vs 24.1%, próbki n=59 vs n=79)
+  oraz niższy revenue per klient (1 286 zł vs 1 533 zł, próbki n=141 vs n=135).
 
-**Wniosek R4 — średni przychód per klient yearly:**
-- new_in_promo_day: 1 286 zł
-- organic: 1 533 zł
-- Różnica 247 zł = ~16% niższe LTV klienta promocyjnego
+**Wniosek R3** — efekt łowców okazji występuje w segmencie yearly, nie monthly. Dla yearly hipoteza "promocje przyciągają klientów o niższym LTV" potwierdza się dwoma niezależnymi metrykami (retencja 12M, avg revenue).
+
+**Wniosek R4** — yearly to produkt one-shot: niezależnie od kohorty, mediana lifespan = 0 dni. Implikacja: budżet retencyjny dla yearly powinien koncentrować się na momencie pierwszego renewala (12M anniversary),
+  nie na ciągłym engagement w pierwszym roku — pierwszy rok nie generuje dodatkowych transakcji u 50% klientów.
+
+#### Zastrzeżenia metodologiczne
+
+1. Próbki dla horyzontów 18M i 24M zbyt małe (n=6 do n=24) — efekty pokazują kierunek, nie dowód statystyczny.
+2. Sztywne okno ±30 dni wokół anniversary może artefaktualnie zaniżać retencję klientów odnawiających po dłuższej przerwie.
+   Walidacja krzyżowa (cumulative "any txn after N days") daje spójny kierunek ale różne wartości — patrz appendix.
+4. Wnioski R2-R4 oparte głównie na 12M retencji + statystykach życia.
+   Dłuższe horyzonty wymagają dodatkowych ~12 miesięcy obserwacji aby dać wystarczające próbki dla testów istotności.
 
 ---
 
@@ -330,11 +334,12 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 | **CHURN** (nie pojawili się w E3) | 26 | **15.7%** |
 | **INNE** (rabat, zmiana planu) | 22 | 13.3% |
 
-**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **100% grandfathered których status jest weryfikowalny w obecnym oknie — nie odnowiło**. 15 klientów ma jeszcze okazję przejścia na cenę 199 lub rezygnacji. Dla przypadków możliwych do zweryfikowania efekt grandfathering to nie alternatywa — to ostatnia płatność przed odejściem.
+**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **100% grandfathered których status jest weryfikowalny w obecnym oknie — nie odnowiło**.
+  15 klientów ma jeszcze okazję przejścia na cenę 249 lub rezygnacji. Dla przypadków możliwych do zweryfikowania efekt grandfathering to nie alternatywa — to ostatnia płatność przed odejściem.
 
 ### 8.2 Podwyżka 2024-09-01 (Era 1 → Era 2)
 
-Mianownik: 64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
+64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
 
 | Status | Liczba | % |
 |---|---|---|
@@ -342,7 +347,7 @@ Mianownik: 64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
 | **CHURN** (nie pojawili się w E2) | 7 | 10.9% |
 | **UPGRADE** (przeszli na 169) | 2 | **3.1%** |
 
-**Wszystkie 55 osób grandfathered z Ery 1 ostatecznie kończy** — ich ostatnia transakcja to grandfathered cena z Ery 1.
+**Wszystkie 55 osób grandfathered z Ery 1 ostatecznie odchodzi** — ich ostatnia transakcja to wynik grandfatheringu ceny z Ery 1.
 
 ### 8.3 Porównanie reakcji na podwyżki
 
@@ -358,7 +363,7 @@ Mianownik: 64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
 - Era 1 → 2 (skok cen o 70.7%): tylko 3% klientów akceptuje upgrade, 86% pozostaje na starej cenie
 - Era 2 → 3 (skok cen o 17.8%): 53% akceptuje upgrade, 18% grandfathered
 
-**Wniosek P2 — grandfathered = przedłużone odejście, nie kontynuacja:** w obu erach **100% klientów grandfathered ostatecznie odchodzi**. Stara cena to tylko buforowanie w czasie momentu odejścia.
+**Wniosek P2 — grandfathered = przedłużone odejście, nie kontynuacja:** w obu erach **100% możliwych do zweryfikowania klientów grandfathered ostatecznie odchodzi**. Stara cena to tylko buforowanie w czasie momentu odejścia.
 
 **Wniosek P3 — wielkość podwyżki determinuje odporność klientów (z istotnymi zastrzeżeniami):**
 
