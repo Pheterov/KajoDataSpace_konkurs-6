@@ -36,147 +36,150 @@
 DROP VIEW IF EXISTS vw_promo_classification;
 
 CREATE VIEW vw_promo_classification AS
-WITH transactions_segmented AS (
-    -- Surowe transakcje wzbogacone o segment.
-    -- Zrodlo do liczenia max cen w oknach kontekstowych wokol wysp.
-    SELECT
-        transaction_date,
-        amount,
-        CASE
-            WHEN amount < 250 THEN 'monthly_sub'
-            WHEN amount < 750 THEN 'course_pack'
-            ELSE                   'yearly'
-        END AS segment
-    FROM transactions
-),
-gaps AS (
-    -- Dla kazdej transakcji: poprzednia transakcja tej samej kwoty + odstep dni
-    SELECT
-        amount,
-        transaction_date,
-        LAG(transaction_date) OVER (
-            PARTITION BY amount ORDER BY transaction_date
-        ) AS prev_date,
-        DATEDIFF(
+WITH transactions_segmented AS 
+(
+-- Segmentacja na podstawie kwoty.
+-- Zrodlo do liczenia max cen w oknach kontekstowych wokol wysp.
+SELECT
+    transaction_date
+    ,amount
+    ,CASE
+        WHEN amount < 250 THEN 'monthly_sub'
+        WHEN amount < 750 THEN 'course_pack'
+        ELSE                   'yearly'
+    END                                                                         segment
+FROM transactions
+), gaps AS 
+(
+-- Dla kazdej transakcji: poprzednia transakcja tej samej kwoty + odstep dni
+SELECT
+    amount
+    ,transaction_date
+    ,LAG(transaction_date) OVER (
+        PARTITION BY amount 
+        ORDER BY transaction_date)                                              prev_date
+        ,DATEDIFF(
             transaction_date,
             LAG(transaction_date) OVER (
-                PARTITION BY amount ORDER BY transaction_date
-            )
-        ) AS gap_days
-    FROM transactions
-),
-island_flags AS (
-    -- Flaga nowej wyspy: gap > 7 dni lub pierwsza transakcja kwoty
-    SELECT
-        *,
-        CASE
-            WHEN gap_days > 7 OR gap_days IS NULL THEN 1
-            ELSE 0
-        END AS is_new_island
-    FROM gaps
-),
-islands AS (
-    -- Numer wyspy per kwota (skumulowana suma flag)
-    SELECT
-        *,
-        SUM(is_new_island) OVER (
-            PARTITION BY amount ORDER BY transaction_date
-        ) AS island_id
-    FROM island_flags
-),
-island_stats AS (
-    -- Agregaty per wyspa: first_seen, last_seen, txn_cnt, span_days, density, segment
-    SELECT
-        amount,
-        island_id,
-        MIN(transaction_date) AS first_seen,
-        MAX(transaction_date) AS last_seen,
-        COUNT(transaction_date) AS txn_cnt,
-        DATEDIFF(MAX(transaction_date), MIN(transaction_date)) AS span_days,
-        ROUND(
-            COUNT(transaction_date) * 1.0
-            / NULLIF(DATEDIFF(MAX(transaction_date), MIN(transaction_date)) + 1, 0),
-            2
-        ) AS density,
-        CASE
-            WHEN amount < 250 THEN 'monthly_sub'
-            WHEN amount < 750 THEN 'course_pack'
-            ELSE                   'yearly'
-        END AS segment
-    FROM islands
-    GROUP BY amount, island_id
-),
-candidates AS (
-    -- Wyroznienie potencjalnych dni promocji.
-    -- Progi segment-specyficzne:
-    --   monthly_sub: density >= 3.0 (P90 rozkladu), txn_cnt >= 5
-    --   yearly:      density >= 0.8 (min wsrod znanych promocji), txn_cnt >= 2
-    SELECT
-        *,
-        CASE
-            WHEN segment = 'monthly_sub' AND density >= 3.0 AND txn_cnt >= 5 THEN 1
-            WHEN segment = 'yearly'      AND density >= 0.8 AND txn_cnt >= 2 THEN 1
-            ELSE 0
-        END AS is_candidate
-    FROM island_stats
-),
-yearly_with_context AS (
-    -- Dla kazdej rocznej wyspy-kandydata: max cena w segmencie yearly
-    -- w oknie 60 dni wstecz i 60 dni w przod (z wykluczeniem samej wyspy).
-    -- Sluzy do wyliczenia rabatu procentowego.
-    SELECT
-        c.*,
-        (SELECT MAX(ts.amount)
-         FROM transactions_segmented ts
-         WHERE ts.segment = 'yearly'
+                PARTITION BY amount
+                ORDER BY transaction_date))                                     gap_days
+FROM transactions
+), island_flags AS
+(
+-- Flaga nowej wyspy: gap > 7 dni lub pierwsza transakcja kwoty
+SELECT
+    *
+    ,CASE
+        WHEN gap_days > 7 OR gap_days IS NULL
+        THEN 1
+        ELSE 0
+    END                                                                         is_new_island
+FROM gaps
+), islands AS
+(
+-- Numer wyspy per kwota (skumulowana suma flag)
+SELECT
+    *
+    ,SUM(is_new_island) OVER (
+        PARTITION BY amount
+        ORDER BY transaction_date)                                              island_id
+FROM island_flags
+), island_stats AS 
+(
+-- Agregaty per wyspa: first_seen, last_seen, txn_cnt, span_days, density, segment
+SELECT
+    amount
+    ,island_id
+    ,MIN(transaction_date) AS first_seen
+    ,MAX(transaction_date) AS last_seen
+    ,COUNT(transaction_date) AS txn_cnt
+    ,DATEDIFF(MAX(transaction_date), MIN(transaction_date))                     span_days
+    ,ROUND(
+        COUNT(transaction_date) * 1.0 /
+        NULLIF(DATEDIFF(MAX(transaction_date), MIN(transaction_date)) + 1, 0), 2) density
+    ,CASE
+        WHEN amount < 250
+        THEN 'monthly_sub'
+        WHEN amount < 750
+        THEN 'course_pack'
+        ELSE 'yearly'
+    END                                                                          segment
+FROM islands
+GROUP BY amount, island_id
+), candidates AS
+(
+-- Wyroznienie potencjalnych dni promocji.
+-- Progi segment-specyficzne:
+--   monthly_sub: density >= 3.0 (P90 rozkladu), txn_cnt >= 5
+--   yearly:      density >= 0.8 (min wsrod znanych promocji), txn_cnt >= 2
+SELECT
+    *
+    ,CASE
+        WHEN segment = 'monthly_sub' AND density >= 3.0 AND txn_cnt >= 5
+        THEN 1
+        WHEN segment = 'yearly'      AND density >= 0.8 AND txn_cnt >= 2
+        THEN 1
+        ELSE 0
+    END                                                                          is_candidate
+FROM island_stats
+), yearly_with_context AS
+(
+-- Dla kazdej rocznej wyspy-kandydata: max cena w segmencie yearly
+-- w oknie 60 dni wstecz i 60 dni w przod (z wykluczeniem samej wyspy).
+-- Sluzy do wyliczenia rabatu procentowego.
+SELECT
+    c.*
+    ,(SELECT MAX(ts.amount)
+        FROM transactions_segmented ts
+        WHERE ts.segment = 'yearly'
            AND ts.transaction_date >= DATE_SUB(c.first_seen, INTERVAL 60 DAY)
-           AND ts.transaction_date <  c.first_seen) AS max_price_before_60d,
-        (SELECT MAX(ts.amount)
-         FROM transactions_segmented ts
-         WHERE ts.segment = 'yearly'
-           AND ts.transaction_date >  c.last_seen
-           AND ts.transaction_date <= DATE_ADD(c.last_seen, INTERVAL 60 DAY)) AS max_price_after_60d
-    FROM candidates c
-    WHERE c.is_candidate = 1 AND c.segment = 'yearly'
-),
-promo_classification AS (
-    -- Klasyfikacja na 5 kategorii biznesowych.
-    -- Kolejnosc CASE WHEN: od najbardziej specyficznej do ogolnej.
-    SELECT
-        *,
-        ROUND((max_price_before_60d - amount) / max_price_before_60d * 100, 1) AS disc_before,
-        ROUND((max_price_after_60d  - amount) / max_price_after_60d  * 100, 1) AS disc_after,
-        CASE
-            WHEN max_price_before_60d IS NULL OR max_price_after_60d IS NULL
-                THEN 'uncertain'
-            WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 < 0
-              OR (max_price_after_60d  - amount) / max_price_after_60d  * 100 < 0
-                THEN 'price_hike'
-            WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 > 45
-              OR (max_price_after_60d  - amount) / max_price_after_60d  * 100 > 45
-                THEN 'grandfathering'
-            WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 BETWEEN 10 AND 45
-             AND (max_price_after_60d  - amount) / max_price_after_60d  * 100 BETWEEN 10 AND 45
-                THEN 'classic_promo'
-            WHEN (max_price_after_60d  - amount) / max_price_after_60d  * 100 BETWEEN 10 AND 45
-             AND (max_price_before_60d - amount) / max_price_before_60d * 100 < 10
-                THEN 'fomo'
-            ELSE 'noise'
-        END AS promo_type
-    FROM yearly_with_context
+           AND ts.transaction_date <  c.first_seen) AS max_price_before_60d
+    ,(SELECT MAX(ts.amount)
+    FROM transactions_segmented ts
+    WHERE ts.segment = 'yearly'
+    AND ts.transaction_date >  c.last_seen
+    AND ts.transaction_date <= DATE_ADD(c.last_seen, INTERVAL 60 DAY))           max_price_after_60d
+FROM candidates c
+WHERE c.is_candidate = 1 AND c.segment = 'yearly'
+), promo_classification AS
+(
+-- Klasyfikacja na 5 kategorii biznesowych.
+-- Kolejnosc CASE WHEN: od najbardziej specyficznej do ogolnej.
+SELECT
+    *
+    ,ROUND((max_price_before_60d - amount) / max_price_before_60d * 100, 1)      disc_before
+    ,ROUND((max_price_after_60d  - amount) / max_price_after_60d  * 100, 1)      disc_after
+    ,CASE
+        WHEN max_price_before_60d IS NULL OR max_price_after_60d IS NULL
+        THEN 'uncertain'
+        WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 < 0
+        OR (max_price_after_60d  - amount) / max_price_after_60d  * 100 < 0
+        THEN 'price_hike'
+        WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 > 45
+        OR (max_price_after_60d  - amount) / max_price_after_60d  * 100 > 45
+        THEN 'grandfathering'
+        WHEN (max_price_before_60d - amount) / max_price_before_60d * 100 BETWEEN 10 AND 45
+        AND (max_price_after_60d  - amount) / max_price_after_60d  * 100 BETWEEN 10 AND 45
+        THEN 'classic_promo'
+        WHEN (max_price_after_60d  - amount) / max_price_after_60d  * 100 BETWEEN 10 AND 45
+        AND (max_price_before_60d - amount) / max_price_before_60d * 100 < 10
+        THEN 'fomo'
+        ELSE 'noise'
+    END                                                                          promo_type
+FROM yearly_with_context
 )
 SELECT
-    promo_type,
-    first_seen,
-    last_seen,
-    amount,
-    txn_cnt,
-    span_days,
-    density,
-    max_price_before_60d,
-    disc_before,
-    max_price_after_60d,
-    disc_after
+    promo_type
+    ,first_seen
+    ,last_seen
+    ,amount
+    ,txn_cnt
+    ,span_days
+    ,density
+    ,max_price_before_60d
+    ,disc_before
+    ,max_price_after_60d
+    ,disc_after
 FROM promo_classification;
 
 
@@ -190,44 +193,49 @@ FROM promo_classification;
 DROP VIEW IF EXISTS vw_fct_clients_v1;
 
 CREATE VIEW vw_fct_clients_v1 AS
-WITH ordered_transactions AS (
+WITH ordered_transactions AS
+(
     -- Ranking transakcji per klient.
     -- Tie-breaker: przy remisie daty wygrywa nizsza kwota.
-    SELECT
-        client_id,
-        transaction_date,
-        amount,
-        ROW_NUMBER() OVER (
-            PARTITION BY client_id
-            ORDER BY transaction_date, amount
-        ) AS rn
-    FROM transactions
-),
-first_transaction AS (
+SELECT
+    client_id
+    ,transaction_date
+    ,amount
+    ,ROW_NUMBER() OVER (
+        PARTITION BY client_id
+        ORDER BY transaction_date, amount)                                    rn
+FROM transactions
+)
+,first_transaction AS
+(
     -- Pierwsza transakcja kazdego klienta - data + kwota
-    SELECT
-        client_id,
-        transaction_date AS first_transaction_date,
-        amount           AS first_amount
-    FROM ordered_transactions
-    WHERE rn = 1
+SELECT
+    client_id
+    ,transaction_date                                                         first_transaction_date
+    ,amount                                                                   first_amount
+FROM ordered_transactions
+WHERE rn = 1
 )
 SELECT
-    f.client_id,
-    f.first_transaction_date,
-    f.first_amount,
+    f.client_id
+    ,f.first_transaction_date
+    ,f.first_amount
     -- Era pozyskania (kalendarzowa, sztywne granice z analizy yearly)
-    CASE
-        WHEN f.first_transaction_date < '2024-09-01' THEN 'Era_1'
-        WHEN f.first_transaction_date < '2025-10-01' THEN 'Era_2'
-        ELSE                                              'Era_3'
-    END AS acquisition_era,
-    -- Segment pozyskania (na podstawie kwoty pierwszej transakcji)
-    CASE
-        WHEN f.first_amount < 250 THEN 'monthly_sub'
-        WHEN f.first_amount < 750 THEN 'course_pack'
-        ELSE                           'yearly'
-    END AS acquisition_segment
+    ,CASE
+        WHEN f.first_transaction_date < '2024-09-01'
+        THEN 'Era_1'
+        WHEN f.first_transaction_date < '2025-10-01'
+        THEN 'Era_2'
+        ELSE 'Era_3'
+    END                                                                       acquisition_era
+-- Segment pozyskania (na podstawie kwoty pierwszej transakcji)
+    ,CASE
+        WHEN f.first_amount < 250 
+        THEN 'monthly_sub'
+        WHEN f.first_amount < 750
+        THEN 'course_pack'
+        ELSE 'yearly'
+    END                                                                       acquisition_segment
 FROM first_transaction f;
 
 
@@ -489,53 +497,87 @@ SET @cutoff = '2025-03-31';
 SET @days = @N * 30;
 SET @window = 30;
 
-WITH client_first AS (
-    SELECT client_id, MIN(transaction_date) AS first_date
-    FROM transactions GROUP BY client_id
-),
-client_first_with_amount AS (
-    SELECT
-        cf.client_id,
-        cf.first_date,
-        (SELECT t.amount FROM transactions t
-         WHERE t.client_id = cf.client_id AND t.transaction_date = cf.first_date
-         ORDER BY t.amount LIMIT 1) AS first_amount
-    FROM client_first cf
-),
-yearly_clients AS (
-    SELECT * FROM client_first_with_amount WHERE first_amount >= 750
-),
-yearly_cohorts AS (
-    SELECT
-        yc.*,
-        CASE WHEN EXISTS (
-            SELECT 1 FROM vw_promo_classification pc
+WITH client_first AS
+(
+SELECT
+    client_id
+    ,MIN(transaction_date)                                                     first_date
+FROM transactions
+GROUP BY client_id
+)
+,client_first_with_amount AS
+(
+SELECT
+    cf.client_id
+    ,cf.first_date
+    ,(
+        SELECT
+            t.amount
+        FROM transactions t
+        WHERE t.client_id = cf.client_id
+            AND t.transaction_date = cf.first_date
+        ORDER BY t.amount
+        LIMIT 1
+    )                                                                           first_amount
+FROM client_first cf
+)
+,yearly_clients AS
+(
+SELECT *
+FROM client_first_with_amount
+WHERE first_amount >= 750
+)
+,yearly_cohorts AS
+(
+SELECT
+    yc.*
+    ,CASE
+        WHEN EXISTS
+        (
+            SELECT
+                1
+            FROM vw_promo_classification pc
             WHERE pc.promo_type IN ('classic_promo', 'fomo')
-              AND yc.first_date BETWEEN pc.first_seen AND pc.last_seen
-              AND yc.first_amount = pc.amount
-        ) THEN 'new_in_promo_day' ELSE 'organic' END AS cohort
-    FROM yearly_clients yc
-),
-eligible AS (
-    SELECT * FROM yearly_cohorts WHERE first_date <= @cutoff
-),
-retained AS (
-    SELECT
-        e.client_id,
-        e.cohort,
-        CASE WHEN EXISTS (
-            SELECT 1 FROM transactions t
-            WHERE t.client_id = e.client_id
-              AND t.transaction_date > DATE_ADD(e.first_date, INTERVAL (@days - @window) DAY)
-              AND t.transaction_date <= DATE_ADD(e.first_date, INTERVAL (@days + @window) DAY)
-        ) THEN 1 ELSE 0 END AS is_retained
-    FROM eligible e
+                AND yc.first_date BETWEEN pc.first_seen AND pc.last_seen
+                AND yc.first_amount = pc.amount
+        )
+        THEN 'new_in_promo_day'
+        ELSE 'organic'
+    END                                                                         cohort
+FROM yearly_clients yc
+)
+,eligible AS
+(
+SELECT *
+FROM yearly_cohorts
+WHERE first_date <= @cutoff
+)
+,retained AS
+(
+SELECT
+    e.client_id
+    ,e.cohort
+    ,CASE
+        WHEN EXISTS
+        (
+        SELECT
+            1
+        FROM
+            transactions t
+        WHERE t.client_id = e.client_id
+            AND t.transaction_date > DATE_ADD(e.first_date, INTERVAL (@days - @window) DAY)
+            AND t.transaction_date <= DATE_ADD(e.first_date, INTERVAL (@days + @window) DAY)
+        )
+        THEN 1
+        ELSE 0
+    END                                                                         is_retained
+FROM eligible e
 )
 SELECT
-    cohort,
-    COUNT(*)                                       AS kohorta_n,
-    SUM(is_retained)                               AS zretencjonowani,
-    ROUND(SUM(is_retained) * 100.0 / COUNT(*), 1)  AS retencja_pct
+    cohort
+    ,COUNT(*)                                                                   kohorta_n
+    ,SUM(is_retained)                                                           retention_customers
+    ,ROUND(SUM(is_retained) * 100.0 / COUNT(*), 1)                              retention_pct
 FROM retained
 GROUP BY cohort
 ORDER BY cohort;
@@ -549,51 +591,93 @@ ORDER BY cohort;
 --   monthly_sub: amount < 250
 --   yearly:      amount >= 750
 -- ------------------------------------------------------------------------
-WITH client_first AS (
-    SELECT client_id, MIN(transaction_date) AS first_date
-    FROM transactions GROUP BY client_id
-),
-client_first_with_amount AS (
+WITH client_first AS
+(
+SELECT
+    client_id
+    ,MIN(transaction_date)                                                     first_date
+FROM transactions
+GROUP BY client_id
+)
+,client_first_with_amount AS
+(
+SELECT
+    cf.client_id
+    ,cf.first_date
+    ,(
     SELECT
-        cf.client_id,
-        cf.first_date,
-        (SELECT t.amount FROM transactions t
-         WHERE t.client_id = cf.client_id AND t.transaction_date = cf.first_date
-         ORDER BY t.amount LIMIT 1) AS first_amount
-    FROM client_first cf
-),
-filtered_clients AS (
-    -- ZMIEN W ZALEZNOSCI OD SEGMENTU:
-    SELECT * FROM client_first_with_amount WHERE first_amount < 250  -- monthly_sub
-    -- SELECT * FROM client_first_with_amount WHERE first_amount >= 750  -- yearly
-),
-cohorts AS (
+        t.amount
+    FROM
+        transactions t
+    WHERE
+        t.client_id = cf.client_id
+        AND t.transaction_date = cf.first_date
+    ORDER BY t.amount
+    LIMIT 1)                                                                   first_amount
+FROM client_first cf
+)
+,filtered_clients AS
+(
+-- ZMIEN W ZALEZNOSCI OD SEGMENTU:
+SELECT *
+FROM client_first_with_amount
+WHERE first_amount < 250
+-- WHERE first_amount >= 750
+)
+,cohorts AS
+(
+SELECT
+    fc.*
+    ,CASE
+        WHEN EXISTS
+        (
+        SELECT
+            1
+        FROM
+            vw_promo_classification pc
+        WHERE pc.promo_type IN ('classic_promo', 'fomo')
+                AND fc.first_date BETWEEN pc.first_seen AND pc.last_seen)
+        THEN 'new_in_promo_day'
+        ELSE 'organic'
+    END                                                                         cohort
+FROM filtered_clients fc
+)
+,client_stats AS
+(
+SELECT
+    c.client_id
+    ,c.cohort
+    ,(
     SELECT
-        fc.*,
-        CASE WHEN EXISTS (
-            SELECT 1 FROM vw_promo_classification pc
-            WHERE pc.promo_type IN ('classic_promo', 'fomo')
-              AND fc.first_date BETWEEN pc.first_seen AND pc.last_seen
-        ) THEN 'new_in_promo_day' ELSE 'organic' END AS cohort
-    FROM filtered_clients fc
-),
-client_stats AS (
+        COUNT(*)
+    FROM
+        transactions t
+    WHERE t.client_id = c.client_id
+    )                                                                           total_txn
+    ,(
     SELECT
-        c.client_id,
-        c.cohort,
-        (SELECT COUNT(*) FROM transactions t WHERE t.client_id = c.client_id) AS total_txn,
-        (SELECT DATEDIFF(MAX(transaction_date), c.first_date)
-         FROM transactions t WHERE t.client_id = c.client_id) AS lifespan_days,
-        (SELECT SUM(amount) FROM transactions t WHERE t.client_id = c.client_id) AS total_revenue
-    FROM cohorts c
+        DATEDIFF(MAX(transaction_date), c.first_date)
+    FROM
+        transactions t
+    WHERE t.client_id = c.client_id
+    )                                                                           lifespan_days
+    ,(
+    SELECT
+        SUM(amount)
+    FROM
+        transactions t
+    WHERE 
+        t.client_id = c.client_id
+    )                                                                           total_revenue
+FROM cohorts c
 )
 SELECT
-    cohort,
-    COUNT(*)                              AS n,
-    ROUND(AVG(total_txn), 2)              AS avg_txn,
-    ROUND(AVG(lifespan_days), 0)          AS avg_lifespan_days,
-    ROUND(AVG(total_revenue), 2)          AS avg_revenue,
-    ROUND(SUM(total_revenue), 2)          AS total_revenue
+    cohort
+    ,COUNT(*)                                                                   n
+    ,ROUND(AVG(total_txn), 2)                                                  avg_txn
+    ,ROUND(AVG(lifespan_days), 0)                                              avg_lifespan_days
+    ,ROUND(AVG(total_revenue), 2)                                              avg_revenue
+    ,ROUND(SUM(total_revenue), 2)                                              total_revenue
 FROM client_stats
 GROUP BY cohort
 ORDER BY cohort;
@@ -604,88 +688,115 @@ ORDER BY cohort;
 -- ------------------------------------------------------------------------
 -- Odnosi sie do: Sekcja 8.1 raportu
 -- ------------------------------------------------------------------------
-WITH last_txn_before_e3 AS (
-    -- Ostatnia transakcja kazdego klienta przed Era 3
-    SELECT client_id, MAX(transaction_date) AS last_date_before_e3
-    FROM transactions WHERE transaction_date < '2025-10-01'
-    GROUP BY client_id
-),
-aktywni_e2 AS (
-    -- Klienci Ery 2 monthly_sub aktywni przed podwyzka
-    -- (ostatnia transakcja w oknie 35 dni przed 2025-10-01)
-    SELECT c.client_id
-    FROM vw_fct_clients_v1 c
-    JOIN last_txn_before_e3 l USING (client_id)
-    WHERE c.acquisition_era = 'Era_2'
-      AND c.acquisition_segment = 'monthly_sub'
-      AND l.last_date_before_e3 >= '2025-08-27'
-),
-pierwsza_akcja_e3 AS (
-    -- Pierwsza akcja kazdego aktywnego klienta w Erze 3
-    SELECT
-        a.client_id,
-        (SELECT t.amount FROM transactions t
-         WHERE t.client_id = a.client_id AND t.transaction_date >= '2025-10-01'
-         ORDER BY t.transaction_date LIMIT 1) AS pierwsza_amount_e3
-    FROM aktywni_e2 a
+WITH last_txn_before_e3 AS
+(
+SELECT
+    client_id
+    ,MAX(transaction_date)                                                 last_date_before_e3
+FROM transactions
+WHERE transaction_date < '2025-10-01'
+GROUP BY client_id
+)
+,aktywni_e2 AS
+(
+SELECT
+    c.client_id
+FROM vw_fct_clients_v1 c
+JOIN last_txn_before_e3 l USING (client_id)
+WHERE c.acquisition_era = 'Era_2'
+    AND c.acquisition_segment = 'monthly_sub'
+    AND l.last_date_before_e3 >= '2025-08-27'
+)
+,pierwsza_akcja_e3 AS
+(
+SELECT
+    a.client_id
+    ,(
+    SELECT t.amount
+    FROM transactions t
+    WHERE t.client_id = a.client_id
+        AND t.transaction_date >= '2025-10-01'
+    ORDER BY t.transaction_date
+    LIMIT 1)                                                                    pierwsza_amount_e3
+FROM aktywni_e2 a
 )
 SELECT
     CASE
-        WHEN pierwsza_amount_e3 IS NULL         THEN '1. CHURN - nie pojawil sie w E3'
-        WHEN pierwsza_amount_e3 = 169           THEN '2. GRANDFATHERED 169'
-        WHEN pierwsza_amount_e3 IN (199, 249)   THEN '3. UPGRADE na nowa cene'
-        ELSE                                         '4. INNE (rabat lub zmiana planu)'
-    END AS status,
-    COUNT(*) AS n,
-    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct
+        WHEN pierwsza_amount_e3 IS NULL
+        THEN '1. CHURN - nie pojawil sie w E3'
+        WHEN pierwsza_amount_e3 = 169
+        THEN '2. GRANDFATHERED 169'
+        WHEN pierwsza_amount_e3 IN (199, 249)
+        THEN '3. UPGRADE na nowa cene'
+        ELSE '4. INNE (rabat lub zmiana planu)'
+    END                                                                         status
+    ,COUNT(*)                                                                   n
+    ,ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1)                         pct
 FROM pierwsza_akcja_e3
 GROUP BY 1
 ORDER BY 1;
-
 
 -- ------------------------------------------------------------------------
 -- 2.7. Wplyw podwyzki na retencje - Era 1 -> Era 2 (2024-09-01)
 -- ------------------------------------------------------------------------
 -- Odnosi sie do: Sekcja 8.2 raportu
 -- ------------------------------------------------------------------------
-WITH ceny_era1 AS (
-    -- Wszystkie ceny monthly_sub uzywane w Erze 1
-    SELECT DISTINCT amount
-    FROM transactions
-    WHERE amount < 250 AND transaction_date < '2024-09-01'
-),
-last_txn_before_e2 AS (
-    SELECT client_id, MAX(transaction_date) AS last_date_before_e2
-    FROM transactions WHERE transaction_date < '2024-09-01'
-    GROUP BY client_id
-),
-aktywni_e1 AS (
-    SELECT c.client_id
-    FROM vw_fct_clients_v1 c
-    JOIN last_txn_before_e2 l USING (client_id)
-    WHERE c.acquisition_era = 'Era_1'
-      AND c.acquisition_segment = 'monthly_sub'
-      AND l.last_date_before_e2 >= '2024-07-28'
-),
-pierwsza_akcja_e2 AS (
-    SELECT
-        a.client_id,
-        (SELECT t.amount FROM transactions t
-         WHERE t.client_id = a.client_id AND t.transaction_date >= '2024-09-01'
-         ORDER BY t.transaction_date LIMIT 1) AS pierwsza_amount_e2
-    FROM aktywni_e1 a
+WITH ceny_era1 AS
+(
+SELECT
+    DISTINCT amount
+FROM transactions
+WHERE amount < 250
+    AND transaction_date < '2024-09-01'
+)
+,last_txn_before_e2 AS
+(
+SELECT
+    client_id
+    ,MAX(transaction_date)                                                     last_date_before_e2
+FROM transactions
+WHERE transaction_date < '2024-09-01'
+GROUP BY 1
+)
+,aktywni_e1 AS
+(
+SELECT
+    c.client_id
+FROM vw_fct_clients_v1 c
+JOIN last_txn_before_e2 l USING (client_id)
+WHERE c.acquisition_era = 'Era_1'
+    AND c.acquisition_segment = 'monthly_sub'
+    AND l.last_date_before_e2 >= '2024-07-28'
+)
+,pierwsza_akcja_e2 AS
+(
+SELECT
+    a.client_id
+    ,(
+    SELECT t.amount
+    FROM transactions t
+    WHERE t.client_id = a.client_id
+        AND t.transaction_date >= '2024-09-01'
+    ORDER BY t.transaction_date
+    LIMIT 1)                                                                    first_amount_e2
+FROM aktywni_e1 a
 )
 SELECT
     CASE
-        WHEN pierwsza_amount_e2 IS NULL                            THEN '1. CHURN - nie pojawil sie w E2'
-        WHEN pierwsza_amount_e2 IN (SELECT amount FROM ceny_era1)  THEN '2. GRANDFATHERED (cena z Ery 1)'
-        WHEN pierwsza_amount_e2 >= 169 AND pierwsza_amount_e2 < 250 THEN '3. UPGRADE na cene Ery 2 (169+)'
-        WHEN pierwsza_amount_e2 >= 250 AND pierwsza_amount_e2 < 750 THEN '4. ZMIANA NA COURSE_PACK'
-        WHEN pierwsza_amount_e2 >= 750                              THEN '5. ZMIANA NA YEARLY'
-        ELSE                                                             '6. INNE'
-    END AS status,
-    COUNT(*) AS n,
-    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct
+        WHEN pierwsza_amount_e2 IS NULL
+        THEN '1. CHURN - nie pojawil sie w E2'
+        WHEN pierwsza_amount_e2 IN (SELECT amount FROM ceny_era1)
+        THEN '2. GRANDFATHERED (cena z Ery 1)'
+        WHEN pierwsza_amount_e2 >= 169 AND pierwsza_amount_e2 < 250
+        THEN '3. UPGRADE na cene Ery 2 (169+)'
+        WHEN pierwsza_amount_e2 >= 250 AND pierwsza_amount_e2 < 750
+        THEN '4. ZMIANA NA COURSE_PACK'
+        WHEN pierwsza_amount_e2 >= 750
+        THEN '5. ZMIANA NA YEARLY'
+        ELSE '6. INNE'
+    END                                                                         status
+    ,COUNT(*)                                                                   n
+    ,ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1)                         pct
 FROM pierwsza_akcja_e2
 GROUP BY 1
 ORDER BY 1;
@@ -733,40 +844,44 @@ ORDER BY t.segment, t.old_price;
 -- ------------------------------------------------------------------------
 -- Odnosi sie do: Walidacja interpretacji er cenowych monthly_sub
 -- ------------------------------------------------------------------------
-WITH monthly_sub_amounts AS (
-    SELECT
-        DATE_FORMAT(transaction_date,'%Y-%m') AS `month`,
-        amount,
-        COUNT(*) AS txn_cnt,
-        SUM(COUNT(*)) OVER (
-            PARTITION BY DATE_FORMAT(transaction_date,'%Y-%m')
-        ) AS total_monthly_txn
-    FROM transactions
-    WHERE amount < 250
-    GROUP BY 1, 2
-),
-rank_by_month AS (
-    SELECT
-        *,
-        RANK() OVER (
-            PARTITION BY `month`
-            ORDER BY txn_cnt DESC
-        ) AS ranking,
-        CASE WHEN EXISTS (
-            SELECT 1 FROM vw_promo_classification pc
-            WHERE pc.promo_type IN ('classic_promo', 'fomo')
-              AND DATE_FORMAT(pc.first_seen, '%Y-%m') = monthly_sub_amounts.`month`
-        ) THEN 1 ELSE 0 END AS had_yearly_promo
-    FROM monthly_sub_amounts
+WITH monthly_sub_amounts AS
+(
+SELECT
+    DATE_FORMAT(transaction_date,'%Y-%m')                                      `month`
+    ,amount
+    ,COUNT(*) AS txn_cnt
+    ,SUM(COUNT(*)) OVER (
+        PARTITION BY DATE_FORMAT(transaction_date,'%Y-%m'))                    total_monthly_txn
+FROM transactions
+WHERE amount < 250
+GROUP BY 1, 2
+), rank_by_month AS
+(
+SELECT
+    *
+    ,RANK() OVER (
+        PARTITION BY `month`
+        ORDER BY txn_cnt DESC)                                                 ranking
+    ,CASE WHEN EXISTS (
+        SELECT 
+            1
+        FROM
+            vw_promo_classification pc
+        WHERE pc.promo_type IN ('classic_promo', 'fomo')
+            AND DATE_FORMAT(pc.first_seen, '%Y-%m') = monthly_sub_amounts.`month`)
+    THEN 1
+    ELSE 0
+END                                                                            had_yearly_promo
+FROM monthly_sub_amounts
 )
 SELECT
-    ranking,
-    `month`,
-    amount,
-    txn_cnt,
-    ROUND(txn_cnt / total_monthly_txn, 2) * 100.0 AS monthly_share_pct,
-    total_monthly_txn,
-    had_yearly_promo
+    ranking
+    ,`month`
+    ,amount
+    ,txn_cnt
+    ,ROUND(txn_cnt / total_monthly_txn, 2) * 100.0 AS monthly_share_pct
+    ,total_monthly_txn
+    ,had_yearly_promo
 FROM rank_by_month
 WHERE ranking <= 3
 ORDER BY `month`, ranking;
@@ -784,30 +899,25 @@ SELECT COUNT(DISTINCT client_id) AS unique_clients FROM transactions;
 
 -- Rozklad era x segment w fct_clients_v1
 SELECT
-    acquisition_era,
-    acquisition_segment,
-    COUNT(*) AS n
+    acquisition_era
+    ,acquisition_segment
+    ,COUNT(*)                                                                 n
 FROM vw_fct_clients_v1
 GROUP BY 1, 2
 ORDER BY 1, 2;
 
 -- Rozklad acquisition_category w fct_clients_v15
 SELECT
-    acquisition_category,
-    COUNT(*) AS n
+    acquisition_category
+    ,COUNT(*)                                                                 n
 FROM vw_fct_clients_v15
 GROUP BY 1
 ORDER BY n DESC;
 
 -- Liczba kategorii w vw_promo_classification
 SELECT
-    promo_type,
-    COUNT(*) AS n
+    promo_type
+    ,COUNT(*)                                                                 n
 FROM vw_promo_classification
 GROUP BY promo_type
 ORDER BY n DESC;
-
-
--- ========================================================================
--- KONIEC PLIKU
--- ========================================================================
