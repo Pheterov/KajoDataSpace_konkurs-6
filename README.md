@@ -298,13 +298,9 @@ Wszystkie trzy metryki są odporne na arbitralne okna tolerancji i nie zależą 
 | new_in_promo_day | 59 | 7 | **11.9%** |
 | organic | 79 | 19 | **24.1%** |
 
-**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej (Wilson 95% CI dla promo: [5.9%, 22.8%]; dla organic: [16.0%, 34.7%]) — przedziały ufności nie nakładają się, kierunek efektu jest realny.
+**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej
 
 Definicja retencji 12M: klient miał transakcję w oknie [first_date + 335 dni, first_date + 395 dni]. Cutoff kohorty eligible (uwzględniając ograniczenie right-censored): first_date ≤ 2025-03-31.
-
-#### Horyzonty 18M i 24M — pominięte z prezentacji głównej
-
-Przy próbkach n=6 (24M promo) i n=9 (18M promo) Wilson 95% CI dla 0/6 wynosi [0%, 39%] — statystycznie nieodróżnialne od dowolnej wartości w tym zakresie. Dodatkowo metodologia okna ±30 dni wokół miesiąca N nie pokrywa typowego renewal pattern dla rocznej subskrypcji. Pełne liczby dostępne w appendixu jako materiał indykatywny, nie podstawa decyzji biznesowych.
 
 #### Wnioski o retencji yearly
 
@@ -335,7 +331,7 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 | **CHURN** (nie pojawili się w E3) | 26 | **15.7%** |
 | **INNE** (rabat, zmiana planu) | 22 | 13.3% |
 
-**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **100% grandfathered których status jest weryfikowalny w obecnym oknie — nie odnowiło**.
+**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **100% grandfathered których status jest weryfikowalny w obecnym oknie — nie odnowiło subskrypcji**.
   15 klientów ma jeszcze okazję przejścia na cenę 249 lub rezygnacji. Dla przypadków możliwych do zweryfikowania efekt grandfathering to nie alternatywa — to ostatnia płatność przed odejściem.
 
 ### 8.2 Podwyżka 2024-09-01 (Era 1 → Era 2)
