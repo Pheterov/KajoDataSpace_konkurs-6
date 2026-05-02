@@ -1,7 +1,3 @@
-Przedstawienie sposobu myślenia, metodologii, technik SQL na drodze do udzielenia odpowiedzi na pytanie konkursowe.
-
-Jak promocje | standardowe ceny | podwyżki wpływają na retencję klientów / nowych klientów? Jest ich mniej? Więcej? Odchodzą szybciej? Sugerowalibyście częstsze promocje, a może częstsze podwyżki cen dla nowych klientów?
-
 # Analiza retencji klientów KajoDataSpace
 ## Wpływ promocji, standardowych cen i podwyżek na zachowanie klientów
 
