@@ -1,4 +1,4 @@
-# Analiza retencji klientów KajoDataSpace
+# Analiza retencji klientów KajoDataSpace 
 ## Wpływ promocji, standardowych cen i podwyżek na zachowanie klientów
 
 **Autor:** Piotr Rzepka  
