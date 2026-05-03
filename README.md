@@ -4,7 +4,7 @@
 **Autor:** Piotr Rzepka  
 **Stack:** MySQL 8+ (kwerendy), DuckDB (walidacja)  
 **Zakres danych:** 2023-11-05 do 2026-03-31, 4 227 transakcji, 1 057 unikalnych klientów  
-**Wersja dokumentu:** 30.04.2026
+**Wersja dokumentu:** 03.05.2026
 
 ---
 
