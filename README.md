@@ -326,8 +326,8 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 | **CHURN** (nie pojawili się w E3) | 26 | **15.7%** |
 | **INNE** (rabat, zmiana planu) | 22 | 13.3% |
 
-**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **w momencie obserwacji 15 z 30 klientów nadal ma szansę na zaakceptowanie nowej ceny, przejście na inny plan lub rezygnację.**.
-  Poprzednie obserwacje klientów segmentu grandfathered kontynuowali zakupy po cenie poprzedniej ery do momentu odejścia, historycznie żaden klient nie przeszedł na nowy plan.
+**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **historycznie żaden klient nie przeszedł na nowy plan**.
+  W momencie obserwacji 15 z 30 klientów nadal ma szansę na zaakceptowanie nowej ceny, przejście na inny plan lub rezygnację.
 
 ### 8.2 Podwyżka 2024-09-01 (Era 1 → Era 2)
 
