@@ -19,7 +19,7 @@
 7. [Etap 5: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
 8. [Etap 6: Wpływ podwyżek na retencję](#8-etap-6-wpływ-podwyżek-na-retencję)
 9. [Wnioski końcowe](#9-wnioski-końcowe)
-10. [Definicje operacyjne](#10-definicje)
+10. [Definicje](#10-definicje)
 11. [Kod SQL — pełne kwerendy](#11-kod-sql--pełne-kwerendy)
 
 ---
