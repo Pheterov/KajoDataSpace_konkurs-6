@@ -79,7 +79,7 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 |---|---|---|---|
 | **Era 1** | 2023-11-05 do 2024-08-31 | ~990 zł | 99 zł |
 | **Era 2** | 2024-09-01 do 2025-09-30 | 1 799 zł | 169 zł |
-| **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł (249 nieobecna w datasecie, aktualna miesieczna kwota subskrypcji KDS) |
+| **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł |
 
 **Akwizycja per era:**
 
