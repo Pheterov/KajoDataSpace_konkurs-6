@@ -122,7 +122,7 @@ Każda wyspa klasyfikowana wg rabatu % w obie strony (60-dniowe okna kontekstowe
 
 ### 4.2 Pełna lista epizodów yearly
 
-| Kategoria | Data | Cena | Rabat % | Txn | Span |
+| Kategoria | Data | Cena | Rabat % | Klienci | Czas trwania (dni) |
 |---|---|---|---|---|---|
 | uncertain | 2023-11-05 | 801 | NULL/19.1 | 2 | 0 |
 | uncertain | 2023-11-05 | 756.50 | NULL/23.6 | 4 | 1 |
