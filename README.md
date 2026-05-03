@@ -384,8 +384,10 @@ Odpowiedź jest **zależna od segmentu**:
 
 **„Jak podwyżki wpływają na retencję?"**
 
-Bezpośrednio i mocno. Podwyżka generuje:
+Podwyżka generuje:
+
 Era1 % - Era2 %
+
 - 11%–16% nieodnowień w obecnym oknie obserwacji (Era 1: 10.9%, Era 2: 15.7%)
 - 18%–86% klientów wybiera grandfathered, ale 100% z nich ostatecznie odchodzi (15 klientów nadal 'w grze')
 - 3%–53% akceptuje nową cenę i kontynuuje subskrypcję
