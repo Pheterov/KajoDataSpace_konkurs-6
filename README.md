@@ -171,7 +171,7 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 | Tranzycja | First new | Last old | Dni nakładania |
 |---|---|---|---|
-| 990 → 1799 | 2024-09-01 | 2024-08-31 (akt. sprz.) | **0** |
+| 990 → 1799 | 2024-09-01 | 2024-08-31 | **0** |
 | 1799 → 1999 | 2025-10-08 | 2025-09-29 | **1** |
 
 **Monthly — stopniowe wypieranie:**
