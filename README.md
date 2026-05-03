@@ -1,10 +1,10 @@
-# Analiza retencji klientów KajoDataSpace 
+# Analiza retencji klientów KajoDataSpace
 ## Wpływ promocji, standardowych cen i podwyżek na zachowanie klientów
 
 **Autor:** Piotr Rzepka  
 **Stack:** MySQL 8+ (kwerendy), DuckDB (walidacja)  
 **Zakres danych:** 2023-11-05 do 2026-03-31, 4 227 transakcji, 1 057 unikalnych klientów  
-**Wersja dokumentu:** 02.05.2026
+**Wersja dokumentu:** 30.04.2026
 
 ---
 
@@ -51,7 +51,7 @@ Analiza została podzielona na sześć etapów:
 
 Zidentyfikowano trzy segmenty produktowe na podstawie kwoty transakcji:
 
-| Segment | Price threshold | Transactions count | Customers count |
+| Segment | Próg | Liczba transakcji | Liczba klientów |
 |---|---|---|---|
 | `monthly_sub` | < 250 zł | 3 833 | 755 |
 | `course_pack` | 250–749 zł | 64 | 34 |
@@ -59,8 +59,7 @@ Zidentyfikowano trzy segmenty produktowe na podstawie kwoty transakcji:
 
 **Próg 750 zł** zwalidowany analizą cyklu odnowień klientów: kwoty 756.50, 801, 871.20, 881.10 wykazują wzorzec powrotów co 365–366 dni (subskrypcje roczne).
 
-**Course_pack wyłączony z analizy promocji** — próbka 64 transakcji niereprezentatywna. Pominięcie segmentu
-nie wpływa na wnioski.
+**Course_pack wyłączony z analizy promocji** — próbka 64 transakcji niereprezentatywna.
 
 ### 3.2 Definicja wyspy cenowej
 
@@ -76,27 +75,27 @@ Metodologia gaps-and-islands z czterema CTE:
 
 Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
-| Era | Period | Yearly price | Monthly price |
+| Era | Okres | Cena katalogowa yearly | Cena katalogowa monthly |
 |---|---|---|---|
 | **Era 1** | 2023-11-05 do 2024-08-31 | ~990 zł | 99 zł |
 | **Era 2** | 2024-09-01 do 2025-09-30 | 1 799 zł | 169 zł |
-| **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł (249 introduced currently, not present in dataset) |
+| **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł (249 nieobecna w datasecie, aktualna miesieczna kwota subskrypcji KDS) |
 
 **Akwizycja per era:**
 
-| Era | monthly_sub | course_pack | yearly | total |
+| Era | monthly_sub | course_pack | yearly | Razem |
 |---|---|---|---|---|
 | Era 1 | 138 | 29 | 57 | 224 |
 | Era 2 | 401 | 1 | 159 | 561 |
 | Era 3 | 212 | 0 | 60 | 272 |
 
-**Era 2 to dominujący okres akwizycyjny** — 53% wszystkich klientów pozyskanych zostało właśnie w tym okresie.
+**Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie najdłużej trwającą erą cenową.
 
 ### 3.4 Progi identyfikacji kandydatów na promocje
 
-Dla każdej wyspy: czy wykazuje cechy ponadprzeciętnego epizodu sprzedaży?
+Dla każdej wyspy: czy ma cechy ponadprzeciętnego epizodu sprzedaży?
 
-| Segment | density threshold | txn_cnt threshold | reasoning |
+| Segment | Próg density | Próg txn_cnt | Uzasadnienie |
 |---|---|---|---|
 | `monthly_sub` | ≥ 3.0 | ≥ 5 | P90 rozkładu density — wyklucza normalne cykle rozliczeniowe |
 | `yearly` | ≥ 0.8 | ≥ 2 | Min wśród 8 znanych promocji; segment małowolumenowy |
@@ -108,21 +107,22 @@ Dla każdej wyspy: czy wykazuje cechy ponadprzeciętnego epizodu sprzedaży?
 
 ### 4.1 Kategorie biznesowe
 
-Każda wyspa-kandydat klasyfikowana wg rabatu % w obie strony (60-dniowe okna kontekstowe):
+Każda wyspa klasyfikowana wg rabatu % w obie strony (60-dniowe okna kontekstowe):
 
-| Category | Criteria | Count | Interpretation |
+| Kategoria | Kryterium | Liczba | Interpretacja |
 |---|---|---|---|
 | `classic_promo` | rabat 10–45% vs before I after | 13 | Klasyczna kampania promocyjna |
 | `fomo` | rabat 10–45% vs after, <10% vs before | 2 | Ostatnia szansa przed podwyżką |
-| `grandfathering` | rabat >45% w którąkolwiek stronę | 4 | Zamrożona cena starego klienta |
+| `grandfathering` | rabat >50% w którąkolwiek stronę | 3 | Zamrożona cena starego klienta |
 | `price_hike` | rabat ujemny (cena wyższa niż kotwica) | 4 | Marker zmiany cennika |
 | `uncertain` | NULL w before lub after | 2 | Edge case startu/końca danych |
+| `noise` | rabat 46–50% bez kontekstu legacy | 1 | Wyspa cenowa bez czytelnej kategorii |
 
-**RAZEM: 25 wysp promocyjnych cen yearly** w okresie 2023-11 do 2026-03.
+**RAZEM: 25 wysp yearly** w okresie 2023-11 do 2026-03.
 
 ### 4.2 Pełna lista epizodów yearly
 
-| Category | Date | Price | Discount % | Count | Span |
+| Kategoria | Data | Cena | Rabat % | Txn | Span |
 |---|---|---|---|---|---|
 | uncertain | 2023-11-05 | 801 | NULL/19.1 | 2 | 0 |
 | uncertain | 2023-11-05 | 756.50 | NULL/23.6 | 4 | 1 |
@@ -135,7 +135,7 @@ Każda wyspa-kandydat klasyfikowana wg rabatu % w obie strony (60-dniowe okna ko
 | grandfathering | 2024-11-05 | 756.50 | 57.9/52.7 | 2 | 0 |
 | **classic_promo** | **2024-11-25** | **999** | **44.5/44.5** | **23** | **8** |
 | **classic_promo** | **2025-01-06** | **999** | **37.5/44.5** | **18** | **8** |
-| grandfathering | 2025-03-12 | 959.20 | 46.7/46.7 | 2 | 0 |
+| noise | 2025-03-12 | 959.20 | 46.7/46.7 | 2 | 0 |
 | classic_promo | 2025-03-12 | 1 139.05 | 36.7/36.7 | 3 | 0 |
 | classic_promo | 2025-03-14 | 1 199 | 33.4/19.5 | 8 | 4 |
 | classic_promo | 2025-05-25 | 1 099 | 26.2/26.2 | 20 | 14 |
@@ -169,14 +169,14 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 **Yearly — cięty switch:**
 
-| Transition | First new | Last old | Overlapping days |
+| Tranzycja | First new | Last old | Dni nakładania |
 |---|---|---|---|
-| 990 → 1799 | 2024-09-01 | 2024-08-31 | **0** |
+| 990 → 1799 | 2024-09-01 | 2024-08-31 (akt. sprz.) | **0** |
 | 1799 → 1999 | 2025-10-08 | 2025-09-29 | **1** |
 
 **Monthly — stopniowe wypieranie:**
 
-| Transition | First new | Last old | Overlapping days |
+| Tranzycja | First new | Last old | Dni nakładania |
 |---|---|---|---|
 | 89 → 99 | 2023-11-06 | 2026-03-06 | **36+** |
 | 99 → 169 | 2024-09-01 | 2026-03-31 | **180+** |
@@ -185,14 +185,12 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 ### 5.2 Interpretacja
 
-**Yearly** = decyzja punktowa właściciela. Klient kupujący po dacie X płaci nową cenę albo jest grandfathered. Brak strefy szarej.
-
-**Monthly** = stopniowe testowanie rynku. Nowa cena uruchamiana równolegle ze starą. Stara wygasa naturalnie, nie jest odcinana. Klienci mogą nadal kupować po starej cenie przez wiele miesięcy po wprowadzeniu nowych cen rocznych.
+**Monthly** = stopniowe testowanie rynku. Nowa cena uruchamiana równolegle ze starą. Stara wygasa naturalnie, nie jest odcinana. Klienci mogą nadal kupować po starej cenie przez wiele miesięcy po dniu zmiany ceny yearly (dzien zmiany Ery cenowej).
 
 ### 5.3 Konsekwencje dla analizy
 
 - Sztywne granice er (2024-09-01, 2025-10-01) wyznaczone przez yearly są **dokładne** dla yearly, **umowne** dla monthly_sub.
-- Akwizycja nowych klientów monthly nie pokrywa się jeden-do-jeden z erą cenową — klient może zapłacić starą cenę w nowej erze.
+- Akwizycja nowych klientów monthly nie pokrywa się jeden-do-jeden z erą cenową — klient może nadal płacić 'starą' cenę w nowej erze.
 
 ---
 
@@ -202,7 +200,7 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 Dla 15 wysp typu `classic_promo` lub `fomo`:
 
-| Beginning date | End date | Days | Price | Discount | Acquired yearly | Yearly revenue | Acquired monthly | Monthly revenue |
+| Data początkowa | Data końcowa | Dni | Cena | Rabat | Pozyskani yearly | Przychód yearly | Pozyskani monthly | Przychód monthly |
 |---|---|---|---|---|---|---|---|---|
 | 2024-01-03 | 2024-01-07 | 5 | 890 | 10.1% | 6 | 5 340.00 | 9 | 801.00 |
 | 2024-09-08 | 2024-09-08 | 1 | 1 599 | 11.1% | 3 | 4 797.00 | 29 | 4 824.95 |
@@ -222,7 +220,7 @@ Dla 15 wysp typu `classic_promo` lub `fomo`:
 
 **Podsumowanie 15 wysp:**
 
-| Segment | Acquired | Revenue (zł) |
+| Segment | Pozyskani | Przychód (zł) |
 |---|---|---|
 | yearly | 141 | 173 196.89 |
 | monthly | 239 | 43 458.31 |
@@ -257,14 +255,14 @@ Dla 15 wysp typu `classic_promo` lub `fomo`:
 
 **Statystyki życia:**
 
-| Cohort | Avg txn | Median txn | Avg lifespan (days) | Median lifespan | Avg revenue |
+| Kohorta | Avg txn | Median txn | Avg lifespan (dni) | Median lifespan | Avg revenue |
 |---|---|---|---|---|---|
 | new_in_promo_day | 4.62 | 3 | 114 | 62 | 825 zł |
 | organic | 5.31 | 3 | 145 | 61 | 833 zł |
 
 **Krzywa retencji (okno ±15 dni od dnia N-tego miesiąca):**
 
-| Horizon | new_in_promo_day | organic | Difference (p.p.) |
+| Horyzont | new_in_promo_day | organic | Różnica (p.p.) |
 |---|---|---|---|
 | 1M | **79.7%** | 71.9% | **+7.8** |
 | 3M | **58.8%** | 45.9% | **+12.9** |
@@ -273,48 +271,45 @@ Dla 15 wysp typu `classic_promo` lub `fomo`:
 
 ### 7.3 Retencja yearly
 
-**Główny insight:** dominująca większość klientów yearly to one-time buyers — 94.3% w kohorcie new_in_promo_day, 83.0% w kohorcie organic.
+**Rozmiar kohort:**
+- new_in_promo_day: 141
+- organic: 135
 
-Yearly to produkt one-shot dla obu kohort. Różnica między kohortami: **11.3 pp więcej one-time buyers w kohorcie promocyjnej** — pierwszy ilościowy dowód na hipotezę "łowców okazji" w segmencie yearly, oparty na twardej liczbie (one-time count), nie metryce kohortowej z arbitralnymi oknami tolerancji.
+**Statystyki życia:**
 
-#### Statystyki życia klienta
+| Kohorta | Avg txn | Median txn | Avg lifespan | Median lifespan | Avg revenue |
+|---|---|---|---|---|---|
+| new_in_promo_day | 1.06 | 1 | 19 dni | 0 dni | 1 286 zł |
+| organic | 1.29 | 1 | 85 dni | 0 dni | 1 533 zł |
 
-| Kohorta | n | One-time | % one-time | Multi-buyers | Avg txn | Avg lifespan | Avg revenue |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| new_in_promo_day | 141 | 133 | **94.3%** | 8 | 1.06 | 19 dni | **1 286 zł** |
-| organic | 135 | 112 | **83.0%** | 23 | 1.29 | 85 dni | **1 533 zł** |
+**Mediana lifespan = 0 dni dla obu kohort** — połowa klientów yearly nigdy nie wraca.
 
-**Trzy liczby pokazujące różnicę kohort:**
-- One-time rate: 94.3% vs 83.0% (+11.3 pp w kohorcie promo)
-- Multi-buyers count: 8 vs 23 (kohorta organic ma **2.9x więcej powracających klientów** w wartościach absolutnych)
-- Avg revenue: 1 286 zł vs 1 533 zł (-247 zł, -16% w kohorcie promo)
+**Krzywa retencji (okno ±30 dni):**
 
-Powyższe metryki są odporne na arbitralne okna tolerancji i nie zależą od cutoff dla kohort eligible.
+| Horyzont | new_in_promo_day | organic | Różnica (p.p.) |
+|---|---|---|---|
+| 12M | 11.9% | **25.3%** | **-13.4** |
+| 24M | 0.0% | **29.2%** | -29.2 |
 
-#### Retencja 12-miesięczna
+**Retencja skumulowana (jakakolwiek transakcja po N dniach):**
 
-| Cohort | N eligible | Retention count | Retention % |
-|---|---:|---:|---:|
-| new_in_promo_day | 59 | 7 | **11.9%** |
-| organic | 79 | 19 | **24.1%** |
+| Horyzont | new_in_promo_day | organic | Różnica (p.p.) |
+|---|---|---|---|
+| 12M | 3.4% | **24.1%** | **-20.7** |
+| 24M | 0.0% | 25.0% | -25.0 |
 
-**Różnica: -12.2 pp.** Próbki na granicy istotności statystycznej
+### 7.4 Wnioski o retencji
 
-Definicja retencji 12M: klient miał transakcję w oknie [first_date + 335 dni, first_date + 395 dni]. Cutoff kohorty eligible (uwzględniając ograniczenie right-censored): first_date ≤ 2025-03-31.
+**Wniosek R1 — segment monthly:** klienci pozyskani w dniach promocji yearly mają **wyższą retencję krótko i średnioterminową** (do 6 miesięcy) niż klienci organic. Po 12 miesiącach efekt się odwraca, ale różnica jest niewielka (2.9 p.p.).
 
-#### Wnioski o retencji yearly
+**Wniosek R2 — segment yearly:** klienci pozyskani w promocji mają **dramatycznie niższą retencję 12-miesięczną** (11.9% vs 25.3%) i praktycznie żadnej długoterminowej (0% vs 25-29% organic w 18-24M).
 
-**Wniosek R2** — segment yearly: klienci pozyskani w promocji mają niższą retencję 12-miesięczną (11.9% vs 24.1%, próbki n=59 vs n=79) oraz niższy revenue per klient (1 286 zł vs 1 533 zł, próbki n=141 vs n=135).
+**Wniosek R3 — efekt łowców okazji występuje w segmencie yearly, nie monthly.** Dla yearly hipoteza "promocje przyciągają klientów o niższym LTV" potwierdza się. Dla monthly jest fałszywa.
 
-**Wniosek R3** — efekt łowców okazji występuje w segmencie yearly, nie monthly. Dla yearly hipoteza "promocje przyciągają klientów o niższym LTV" potwierdza się dwoma niezależnymi metrykami (retencja 12M, avg revenue).
-
-**Wniosek R4** — yearly to produkt one-shot dla zdecydowanej większości klientów (83-94% one-time rate). Implikacja: budżet retencyjny dla yearly powinien koncentrować się na momencie pierwszego renewala (12M anniversary), nie na ciągłym engagement w pierwszym roku — u przeważającej większości klientów pierwszy rok nie generuje dodatkowych transakcji.
-
-#### Zastrzeżenia metodologiczne
-
-1. Próbki dla horyzontów 18M i 24M zbyt małe (n=6 do n=24) — efekty pokazują kierunek, nie dowód statystyczny.
-2. Sztywne okno ±30 dni wokół anniversary może artefaktualnie zaniżać retencję klientów odnawiających po dłuższej przerwie. Walidacja krzyżowa (cumulative "any txn after N days") daje spójny kierunek, ale różne wartości — patrz appendix.
-3. Wnioski R2-R4 oparte głównie na 12M retencji + statystykach życia. Dłuższe horyzonty wymagają dodatkowych ~12 miesięcy obserwacji, aby dać wystarczające próbki dla testów istotności.
+**Wniosek R4 — średni przychód per klient yearly:**
+- new_in_promo_day: 1 286 zł
+- organic: 1 533 zł
+- Różnica 247 zł = ~16% niższe LTV klienta promocyjnego
 
 ---
 
@@ -331,12 +326,12 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 | **CHURN** (nie pojawili się w E3) | 26 | **15.7%** |
 | **INNE** (rabat, zmiana planu) | 22 | 13.3% |
 
-**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **100% grandfathered których status jest weryfikowalny w obecnym oknie — nie odnowiło subskrypcji**.
-  15 klientów ma jeszcze okazję przejścia na cenę 249 lub rezygnacji. Dla przypadków możliwych do zweryfikowania efekt grandfathering to nie alternatywa — to ostatnia płatność przed odejściem.
+**Kluczowa obserwacja:** ze wszystkich 30 klientów grandfathered (płacących 169 zł w Erze 3) **w momencie obserwacji 15 z 30 klientów nadal ma szansę na zaakceptowanie nowej ceny, przejście na inny plan lub rezygnację.**.
+  Poprzednie obserwacje klientów segmentu grandfathered kontynuowali zakupy po cenie poprzedniej ery do momentu odejścia, historycznie żaden klient nie przeszedł na nowy plan.
 
 ### 8.2 Podwyżka 2024-09-01 (Era 1 → Era 2)
 
-64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
+Mianownik: 64 klientów Ery 1 monthly_sub aktywnych w momencie podwyżki.
 
 | Status | Liczba | % |
 |---|---|---|
@@ -344,7 +339,7 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 | **CHURN** (nie pojawili się w E2) | 7 | 10.9% |
 | **UPGRADE** (przeszli na 169) | 2 | **3.1%** |
 
-**Wszystkie 55 osób grandfathered z Ery 1 ostatecznie odchodzi** — ich ostatnia transakcja to wynik grandfatheringu ceny z Ery 1.
+**Wszystkie 55 osób grandfathered z Ery 1 ostatecznie kończy** — ich ostatnia transakcja to grandfathered cena z Ery 1.
 
 ### 8.3 Porównanie reakcji na podwyżki
 
@@ -360,7 +355,7 @@ Mianownik: 166 klientów Ery 2 monthly_sub aktywnych w momencie podwyżki (ostat
 - Era 1 → 2 (skok cen o 70.7%): tylko 3% klientów akceptuje upgrade, 86% pozostaje na starej cenie
 - Era 2 → 3 (skok cen o 17.8%): 53% akceptuje upgrade, 18% grandfathered
 
-**Wniosek P2 — grandfathered = przedłużone odejście, nie kontynuacja:** w obu erach **100% możliwych do zweryfikowania klientów grandfathered ostatecznie odchodzi**. Stara cena to tylko buforowanie w czasie momentu odejścia.
+**Wniosek P2 — grandfathered = przedłużone odejście, nie kontynuacja:** w obu erach **100% klientów grandfathered możliwych do zweryfikowania ostatecznie odchodzi, nadal mamy 15 klientów których płatnośc została dokonana w marcu 2026**.
 
 **Wniosek P3 — wielkość podwyżki determinuje odporność klientów (z istotnymi zastrzeżeniami):**
 
@@ -368,8 +363,8 @@ Surowe liczby sugerują, że mniejsza podwyżka (Era 2 → 3, +17.8% ceny) była
 
 **Zastrzeżenia metodologiczne — krytyczne dla interpretacji:**
 - **Mianowniki nieporównywalne** (64 vs 166 klientów). Era 1 to wczesny etap KDS, mała baza klientów, inny profil produktu i komunikacji.
-- **Asymetryczne okno obserwacji.** Klienci Ery 1 grandfathered mieli **12 miesięcy** do kolejnej podwyżki, dłuższy czas na podjęcie decyzji o odejściu. Klienci Ery 2 grandfathered mają tylko **6 miesięcy** do końca okna danych (right-censored).
-- **Wpływ dojrzałości produktu.** Wyższa retencja w Erze 2 może wynikać z dojrzalszego produktu, lepszego marketingu, ugruntowanej bazy lojalnych klientów — nie tylko ze skali samej podwyżki.
+- **Asymetryczne okno obserwacji.** Klienci Ery 1 grandfathered mieli **12 miesięcy** do kolejnej podwyżki. Klienci grandfathered Ery 2 mają tylko **6 miesięcy** do końca okna danych.
+- **Wpływ dojrzałości produktu.** Wyższa retencja w Erze 2 może wynikać z dojrzalszego produktu, lepszej komunikacji marketingowej, ugruntowanej bazy lojalnych klientów — nie tylko ze skali samej podwyżki.
 
 **Z tych powodów nie można jednoznacznie powiedzieć, że to wielkość podwyżki jest jedyną przyczyną różnic. Wniosek P3 wskazuje korelację, nie przyczynowość.**
 
@@ -377,23 +372,24 @@ Surowe liczby sugerują, że mniejsza podwyżka (Era 2 → 3, +17.8% ceny) była
 
 ## 9. WNIOSKI KOŃCOWE
 
-### 9.1 Odpowiedzi na pytanie konkursowe
+### 9.1 Odpowiedź na pytanie konkursowe
 
 **„Jak promocje wpływają na retencję? Odchodzą szybciej?"**
 
 Odpowiedź jest **zależna od segmentu**:
 
-- **Monthly_sub:** klienci pozyskani w dniach promocji yearly NIE odchodzą szybciej w krótkim terminie. W pierwszych 6 miesiącach mają **wyższą retencję** (do +12.9 p.p. po 3M, na próbkach 462–502 obserwacji organic / 182–202 obserwacji promo). Łowcy okazji nieobecni w tym segmencie.
+- **Monthly_sub:** klienci pozyskani w dniach promocji yearly NIE odchodzą szybciej w krótkim terminie. W pierwszych 6 miesiącach mają **wyższą retencję** (do +12.9 p.p. po 3M, na próbkach 462–502 obs. organic / 182–202 obs. promo).
 
-- **Yearly:** klienci pozyskani w promocji mają **niższą retencję 12-miesięczną** (11.9% vs 25.3%) na próbkach kohorty klientów kwalifikujących się ze względu na ograniczenia czasowe datasetu 59 obserwacji promo / 79 obserwacji organic. Po 18-24 miesiącach efekt jest jeszcze silniejszy, ale próbki kohorty stają się bardzo małe (6–63 obserwacji), więc te liczby należy traktować jako **wskazujące kierunek, nie dowód statystyczny**. Hipoteza "łowców okazji" znajduje wstępne potwierdzenie dla yearly i wymaga dodatkowej walidacji na większym oknie obserwacji.
+- **Yearly:** klienci pozyskani w promocji mają **niższą retencję 12-miesięczną** (11.9% vs 25.3%) na próbkach kohorty eligible 59 obs. promo / 79 obs. organic. Po 24 miesiącach efekt jest jeszcze silniejszy, ale próbki kohorty stają się bardzo małe (6–63 obserwacji), więc te liczby należy traktować jako **wskazujące kierunek, nie dowód statystyczny**. Hipoteza "łowców okazji" znajduje wstępne potwierdzenie dla yearly i wymaga dodatkowej walidacji na większym oknie obserwacji.
 
 **„Jak podwyżki wpływają na retencję?"**
 
-Podwyżka generuje:
-- 16-34% natychmiastowy churn (w zależności od skali podwyżki)
-- 18-86% klientów grandfathered, ale ogromna część z nich ostatecznie odchodzi:
-  wszyscy klienci Era 1, 15 z 30 klientów Era 2.
-- Tylko 3-53% obecnych subskrybujących akceptuje nową cenę i kontynuuje subskrypcję
+Bezpośrednio i mocno. Podwyżka generuje:
+Era1 % - Era2 %
+- 11%–16% nieodnowień w obecnym oknie obserwacji (Era 1: 10.9%, Era 2: 15.7%)
+- 18%–86% klientów wybiera grandfathered, ale 100% z nich ostatecznie odchodzi (15 klientów nadal 'w grze')
+- 3%–53% akceptuje nową cenę i kontynuuje subskrypcję
+- 13% (tylko Era 2) wybiera inne ścieżki (rabaty, zmiana planu)
 
 **„Jak standardowe ceny wpływają na retencję?"**
 
@@ -404,13 +400,15 @@ Klienci `organic` (kupujący po standardowych cenach) mają:
 
 ### 9.2 Kluczowe rekomendacje biznesowe
 
-**Rekomendacja 1:** Promocje yearly należy traktować jako narzędzie **akwizycji wolumenu**, nie wartości. Łowcy okazji generują niższy LTV i nie wracają.
+**Rekomendacja 1:** Promocje yearly należy traktować jako narzędzie **akwizycji wolumenu**, nie wartości. Łowcy okazji generują niższy LTV i nie odnawiają subskrypcji.
 
 **Rekomendacja 2:** Promocje yearly mają **silny efekt halo na monthly** (3.34x wzrost akwizycji). Wartość promocji yearly należy mierzyć łącznie: bezpośredni przychód yearly + efekt halo monthly.
 
 **Rekomendacja 3:** Strategia "monthly displacement" (stopniowe wypieranie starej ceny) ogranicza churn przy podwyżkach w porównaniu do "yearly switch" — klienci mają czas na adaptację. Zaleca się utrzymanie tej strategii.
 
-**Rekomendacja 4:** Grandfathering nie jest narzędziem retencji — to opóźniony churn. W obecnym oknie danych żaden z klientów grandfathered (przy obu podwyżkach) nie odnowił subskrypcji po swojej ostatniej płatności. Należy rozważyć aktywną komunikację z klientami segmentu grandfathered jako grupą wysokiego ryzyka.
+**Rekomendacja 4:** Grandfathered nie jest narzędziem retencji — to opóźniony churn. W obecnym oknie danych żaden z klientów grandfathered (przy obu podwyżkach) nie odnowił po swojej ostatniej grandfathered płatności. Należy rozważyć aktywną komunikację z grandfathered jako grupą wysokiego ryzyka.
+
+> **Zastrzeżenie metodologiczne:** wniosek "100% grandfathered odchodzi" opiera się na obserwacji wyłącznie w obecnym oknie danych (do 2026-03-31). Nie wykluczamy, że część klientów grandfathered jeszcze nie weszła w cykl odnowienia (zwłaszcza w przypadku podwyżki Era 2 → 3, gdzie część klientów grandfathered miała ostatnią płatność dopiero w marcu 2026). Pełna walidacja wymaga monitoringu kohorty przez co najmniej 6 miesięcy po końcu okna danych.
 
 **Rekomendacja 5:** Mniejsze rabaty (<25%) mają wyższą efektywność per dzień, ale mniejszy zasięg. Większe rabaty (≥25%) mają niższą efektywność dzienną, ale dłuższe trwanie i większy efekt halo. Optymalny mix powinien zawierać oba typy.
 
@@ -419,11 +417,11 @@ Klienci `organic` (kupujący po standardowych cenach) mają:
 1. **Okno danych** kończy się 2026-03-31. Klienci pozyskani w ostatnich 12 miesiącach nie mogą być oceniani na pełnym horyzoncie 12M.
 2. **Retencja długoterminowa yearly** opiera się na małych próbkach (kohorty 18-24M mają 6-63 obserwacji).
 3. **Hipoteza półrocznej subskrypcji w Erze 1** — nie zweryfikowana, oznaczona komentarzem.
-4. **Kategoria grandfathering w klasyfikacji wysp** łączy dwa zjawiska: (a) starych klientów z Ery 1, (b) klientów z anomalnymi rabatami. Rozróżnienie wymagałoby dodatkowej analizy per-klient.
+4. **Kategoria `grandfathering` opiera się na progu rabatu 50% vs kontekst.** Klienci z rabatem 46–50% trafiają do `noise` (1 wyspa: 2025-03-12 amount=959.20, 2 nowi klienci). Próg jest empirycznie skalibrowany dla obecnego datasetu — w obecnych danych klienci legacy mają rabat 55–60% (drugi/trzeci rok bez podwyżki), nowi przypadkowi ~46%. Przy znaczącej zmianie cennika może wymagać ponownego strojenia lub przejścia na strukturalne sprawdzanie historii klienta (czy klient miał wcześniejszą transakcję przed wyspą).
 
 ---
 
-## 10. DEFINICJE OPERACYJNE
+## 10. DEFINICJE
 
 ### 10.1 Era pozyskania klienta
 
@@ -442,6 +440,8 @@ Era kalendarzowa wyznaczona przez datę pierwszej transakcji klienta:
 1. Wypadł z okna aktywności (>35 dni monthly / >370 dni yearly), ORAZ
 2. Wrócił transakcją spełniającą warunki `new_in_promo`
 
+> *W obecnym datasecie kategoria liczy 1 klienta (id=137, yearly: 2024-03-10 → 2025-03-17, delta 372 dni). Z uwagi na pojedynczą obserwację nie analizujemy tej kohorty osobno — w tabelach retencji jest agregowana jako część grupy referencyjnej.*
+
 **`organic`** — wszyscy pozostali (default).
 
 ### 10.3 Retencja kohortowa
@@ -452,7 +452,7 @@ Klient zretencjonowany po N miesiącach (`retained_after_N_months = TRUE`), jeż
 - Monthly: transakcja w oknie [(X+N)-15d, (X+N)+15d]
 - Yearly: transakcja w oknie [(X+N)-30d, (X+N)+30d]
 
-**Horyzonty:** 1, 3, 6, 12 miesięcy (monthly); 6, 12, 18, 24 miesięcy (yearly).
+**Horyzonty:** 1, 3, 6, 12 miesięcy (monthly); 12, 24 miesiące (yearly).
 
 ### 10.4 Próg luki dla wyspy
 
@@ -466,14 +466,4 @@ Luka >7 dni między transakcjami tej samej kwoty rozpoczyna nową wyspę.
 
 ## 11. KOD SQL — PEŁNE KWERENDY
 
-Pełne kwerendy znajdują się w osobnym pliku:
-
-- `01_vw_promo_classification.sql` — widok klasyfikacji wysp yearly
-- `02_vw_fct_clients_v15.sql` — widok klientów z atrybutami pozyskania
-- `03_acquisition_per_island.sql` — tabela akwizycji per wyspa promocyjna
-- `04_cohort_retention_monthly.sql` — analiza retencji monthly
-- `05_cohort_retention_yearly.sql` — analiza retencji yearly
-- `06_price_hike_impact.sql` — wpływ podwyżek na retencję
-- `07_signature_proof.sql` — dowód SQL "switch vs displacement"
-
----
+Pełne kwerendy znajdują się w osobnym pliku
