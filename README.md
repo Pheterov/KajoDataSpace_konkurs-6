@@ -92,7 +92,8 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
 
 <img width="994" height="560" alt="image" src="https://github.com/user-attachments/assets/e93ed46a-59f7-477b-83ce-71529533f8a4" />
-&nbsp;
+
+
 **Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie najdłużej trwającą erą cenową.
 
 ### 3.4 Progi identyfikacji kandydatów na promocje
