@@ -94,6 +94,7 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
 **Pionowe przerywane linie** - wskazują granice Er cenowych
 
+<img width="979" height="523" alt="image" src="https://github.com/user-attachments/assets/d908653b-dcc7-412f-b633-6e6295d34403" />
 
 ---
 ## 4. ETAP 2: SYGNATURA STRATEGII CENOWEJ KDS
