@@ -132,10 +132,10 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 ## 6. ETAP 4: RETENCJA KOHORTOWA
 
 NOWI klienci pozyskani w DNIU PROMOCJI
-<img width="825" height="593" alt="image" src="https://github.com/user-attachments/assets/4b99fcd8-735c-4b6a-90b5-96d2e51c2218" />
+<img width="881" height="627" alt="image" src="https://github.com/user-attachments/assets/12a08a9f-0850-4013-bac1-2b0915c4715b" />
 
 NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
-<img width="825" height="594" alt="image" src="https://github.com/user-attachments/assets/de2bec28-cd29-490d-9c94-6f2c7ca29477" />
+<img width="892" height="631" alt="image" src="https://github.com/user-attachments/assets/f2255956-4efb-4fda-bb04-bfcc56b45b3b" />
 
 ### 7 Definicje kohort
 
