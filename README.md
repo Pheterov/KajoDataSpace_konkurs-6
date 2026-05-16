@@ -86,7 +86,7 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 | **Era 2** | 2024-09-01 do 2025-09-30 | 1 799 zł | 169 zł |
 | **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł |
 
-<img width="992" height="563" alt="image" src="https://github.com/user-attachments/assets/bb74d54f-644e-4bbe-8d5b-934677bc48a3" />
+<img width="1036" height="635" alt="image" src="https://github.com/user-attachments/assets/58af269c-a860-4f79-b45e-625fc2232174" />
 
 **Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
 
