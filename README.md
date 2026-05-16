@@ -36,10 +36,6 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 <img width="680" height="624" alt="image" src="https://github.com/user-attachments/assets/d0d9feba-a47d-4ce3-9071-ecdb91c29cd9" />
 
-<img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />
-
-Pionowe przerywane linie wyznaczają granice Er cenowych
-
 Analiza została podzielona na pięć etapów:
 
 1. **Mapowanie krajobrazu cenowego** — identyfikacja promocji na podstawie wzorców cenowych
@@ -91,8 +87,11 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 | **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł |
 
 <img width="992" height="563" alt="image" src="https://github.com/user-attachments/assets/bb74d54f-644e-4bbe-8d5b-934677bc48a3" />
-
 **Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
+
+<img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />
+**Pionowe przerywane linie** - wskazują granice Er cenowych
+
 
 ---
 ## 4. ETAP 2: SYGNATURA STRATEGII CENOWEJ KDS
