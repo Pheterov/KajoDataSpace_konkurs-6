@@ -127,8 +127,6 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 <img width="882" height="623" alt="image" src="https://github.com/user-attachments/assets/ac35c3e4-8bcb-452c-bfda-69c2fee16228" />
 
-<img width="925" height="598" alt="image" src="https://github.com/user-attachments/assets/e5e3a379-c839-4163-a45f-4ef6e90f99ba" />
-
 ---
 
 ## 6. ETAP 4: RETENCJA KOHORTOWA
