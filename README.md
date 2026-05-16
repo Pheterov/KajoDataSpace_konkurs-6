@@ -89,9 +89,9 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 **Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
 
 ---
-## 5. ETAP 3: SYGNATURA STRATEGII CENOWEJ KDS
+## 4. ETAP 2: SYGNATURA STRATEGII CENOWEJ KDS
 
-### 5.1 Obserwacja kluczowa
+### 4.1 Obserwacja kluczowa
 
 Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania nowych cen.
 
@@ -111,24 +111,24 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 | 169 → 199 | 2024-09-10 | 2026-03-30 | **194** |
 | 199 → 249 | 2025-09-12 | 2026-03-30 | **134** |
 
-### 5.2 Interpretacja
+### 4.2 Interpretacja
 
 **Monthly** = stopniowe testowanie rynku. Nowa cena uruchamiana równolegle ze starą. Stara wygasa naturalnie, nie jest odcinana. Klienci mogą nadal kupować po starej cenie przez wiele miesięcy po dniu zmiany ceny yearly (dzien zmiany Ery cenowej).
 
-### 5.3 Konsekwencje dla analizy
+### 4.3 Konsekwencje dla analizy
 
 - Sztywne granice er (2024-09-08, 2025-09-08) wyznaczone przez yearly są **dokładne** dla yearly, **umowne** dla monthly_sub.
 - Akwizycja nowych klientów monthly nie pokrywa się jeden-do-jeden z erą cenową — klient może nadal płacić 'starą' cenę w nowej erze.
 
 ---
 
-## 6. ETAP 4: AKWIZYCJA KLIENTÓW W OKRESACH PROMOCJI
+## 5. ETAP 3: AKWIZYCJA KLIENTÓW W OKRESACH PROMOCJI
 
 <img width="882" height="623" alt="image" src="https://github.com/user-attachments/assets/ac35c3e4-8bcb-452c-bfda-69c2fee16228" />
 
 ---
 
-## 7. ETAP 5: RETENCJA KOHORTOWA
+## 6. ETAP 4: RETENCJA KOHORTOWA
 
 NOWI klienci pozyskani w DNIU PROMOCJI
 <img width="825" height="593" alt="image" src="https://github.com/user-attachments/assets/4b99fcd8-735c-4b6a-90b5-96d2e51c2218" />
@@ -136,7 +136,7 @@ NOWI klienci pozyskani w DNIU PROMOCJI
 NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
 <img width="825" height="594" alt="image" src="https://github.com/user-attachments/assets/de2bec28-cd29-490d-9c94-6f2c7ca29477" />
 
-### 7.1 Definicje kohort
+### 7 Definicje kohort
 
 - **`new_in_promo_day`** — klient, którego pierwsza transakcja nastąpiła w dniu promocjii.
   Obsługiwane przypadki:
@@ -144,13 +144,13 @@ NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
 - klient z segmentu organic, który zmienił plan z monthly na yearly w dniu promocji
 - **`organic`** — klient, którego pierwsza transakcja nastąpiła w dniu innym niż poromocyjnym
 
-### 7.2 Retencja monthly_sub
+### 7.1 Retencja monthly_sub
 
 **Rozmiar kohort:**
 - new_in_promo_day: 374
 - organic: 544
 
-### 8.4 Wnioski o podwyżkach
+### 8 Wnioski o podwyżkach
 
 **Wniosek P1 — radykalnie różne reakcje na dwie podwyżki:**
 - Era 1 → 2 (skok cen o 70.7%): tylko 3% klientów akceptuje upgrade, 86% pozostaje na starej cenie
@@ -170,7 +170,3 @@ Surowe liczby sugerują, że mniejsza podwyżka (Era 2 → 3, +17.8% ceny) była
 **Z tych powodów nie można jednoznacznie powiedzieć, że to wielkość podwyżki jest jedyną przyczyną różnic. Wniosek P3 wskazuje korelację, nie przyczynowość.**
 
 ---
-
-## 11. KOD SQL — PEŁNE KWERENDY
-
-Pełne kwerendy znajdują się w osobnym pliku
