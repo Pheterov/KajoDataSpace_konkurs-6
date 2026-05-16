@@ -28,7 +28,7 @@
 
 > *„Jak promocje, standardowe ceny i podwyżki wpływają na retencję klientów / nowych klientów? Jest ich mniej? Więcej? Odchodzą szybciej?"*
 
-Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną zmienną zależną (retencja). Ze szczególnym uwzględnieniem nowych klientów.
+Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną zmienną zależną (retencja).
 
 ---
 
@@ -36,12 +36,11 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 Analiza została podzielona na sześć etapów:
 
-1. **Mapowanie krajobrazu cenowego** — identyfikacja "wysp" (epizodów cenowych) metodą gaps-and-islands
-2. **Klasyfikacja epizodów yearly** — kategoryzacja wysp na 5 typów biznesowych
-3. **Sygnatura strategii cenowej** — analiza wzorców wprowadzania nowych cen
-4. **Akwizycja w promocjach** — ile klientów pozyskano w dni promocji yearly
-5. **Retencja kohortowa** — porównanie krzywych retencji `new_in_promo` vs `organic`
-6. **Wpływ podwyżek** — analiza zachowania klientów w momencie zmian cennika
+1. **Mapowanie krajobrazu cenowego** — identyfikacja promocji na podstawie wzorców cenowych
+2. **Sygnatura strategii cenowej** — analiza wzorców wprowadzania nowych cen
+3. **Akwizycja w promocjach** — ilu nowych klientów pozyskano w dni promocji
+4. **Retencja kohortowa** — porównanie krzywych retencji `new_in_promo` vs `organic`
+5. **Wpływ podwyżek** — analiza zachowania klientów w momencie zmian cennika
 
 ---
 
@@ -49,27 +48,31 @@ Analiza została podzielona na sześć etapów:
 
 ### 3.1 Założenia segmentacji
 
-Zidentyfikowano trzy segmenty produktowe na podstawie kwoty transakcji:
+Segmenty produktowe zidentyfikowano na podstawie kwoty transakcji:
 
 | Segment | Próg | Liczba transakcji | Liczba klientów |
 |---|---|---|---|
 | `monthly_sub` | < 250 zł | 3 833 | 755 |
-| `course_pack` | 250–749 zł | 64 | 34 |
-| `yearly` | ≥ 750 zł | 330 | 294 |
+| `course_pack` | 250–689 zł | 64 | 30 |
+| `yearly` | ≥ 690 zł | 330 | 298 |
 
-**Próg 750 zł** zwalidowany analizą cyklu odnowień klientów: kwoty 756.50, 801, 871.20, 881.10 wykazują wzorzec powrotów co 365–366 dni (subskrypcje roczne).
+**Próg 690 zł** zwalidowany analizą cyklu odnowień klientów: ceny powyżej progu wykazują wzorzec powrotów co 365–366 dni (subskrypcje roczne).
 
-**Course_pack wyłączony z analizy promocji** — próbka 64 transakcji niereprezentatywna.
+**Course_pack wyłączony z analizy promocji** — próbka 30 klientów niereprezentatywna.
 
-### 3.2 Definicja wyspy cenowej
+### 3.2 Definicja promocji
 
-Wyspa = ciągły okres aktywnej sprzedaży tej samej ceny. Granica wyspy: luka >7 dni między transakcjami tej samej kwoty.
+Cena promocyjna jest mniejsza od ceny katalogowej o % z przedziału 10 - 50
 
-Metodologia gaps-and-islands z czterema CTE:
-1. `gaps` — odstępy między transakcjami tej samej kwoty
-2. `island_flags` — flagowanie nowych wysp
-3. `islands` — numerowanie wysp w ramach każdej kwoty
-4. `island_stats` — agregaty per wyspa (first_seen, last_seen, txn_cnt, span_days, density)
+**Wzorzec mnożników rabatowych:** ceny rabatowe są policzalne od cen katalogowych z mnożnikami 0.8 / 0.85 / 0.9. Przykłady:
+- 75.65 = 89 × 0.85 (rabat 15% miesięczny)
+- 79.20 = 99 × 0.80 (rabat 20%)
+- 871.20 = 1089 × 0.80 (rabat 20% roczny)
+- 
+Dzień promocyjny jest dniem w którym dokonano przynajmniej jednego zakupu po cenie promocyjnej
+
+KajoData Space nie stosuje kuponów promocyjnych do wykorzystania w przyszłości, natomiast ze względu na liczne współprace
+oferuje kilkudniowe zniżki dla społeczności innych twórców
 
 ### 3.3 Trzy ery cenowe
 
@@ -77,93 +80,15 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
 | Era | Okres | Cena katalogowa yearly | Cena katalogowa monthly |
 |---|---|---|---|
-| **Era 1** | 2023-11-05 do 2024-08-31 | ~990 zł | 99 zł |
+| **Era 1** | 2023-11-05 do 2024-08-31 | ≥690 zł | 99 zł |
 | **Era 2** | 2024-09-01 do 2025-09-30 | 1 799 zł | 169 zł |
 | **Era 3** | 2025-10-01 do 2026-03-31 | 1 999 zł | 199 zł |
 
-**Akwizycja per era:**
+<img width="992" height="563" alt="image" src="https://github.com/user-attachments/assets/bb74d54f-644e-4bbe-8d5b-934677bc48a3" />
 
-| Era | monthly_sub | course_pack | yearly | Razem |
-|---|---|---|---|---|
-| Era 1 | 138 | 29 | 57 | 224 |
-| Era 2 | 401 | 1 | 159 | 561 |
-| Era 3 | 212 | 0 | 60 | 272 |
-
-
-<img width="990" height="562" alt="image" src="https://github.com/user-attachments/assets/db14ca1e-116d-410b-8d09-e5b352ec8a74" />
-
-**Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie najdłużej trwającą erą cenową.
-
-### 3.4 Progi identyfikacji kandydatów na promocje
-
-Dla każdej wyspy: czy ma cechy ponadprzeciętnego epizodu sprzedaży?
-
-| Segment | Próg density | Próg txn_cnt | Uzasadnienie |
-|---|---|---|---|
-| `monthly_sub` | ≥ 3.0 | ≥ 5 | P90 rozkładu density — wyklucza normalne cykle rozliczeniowe |
-| `yearly` | ≥ 0.8 | ≥ 2 | Min wśród 8 znanych promocji; segment małowolumenowy |
-| `course_pack` | — | — | Wyłączony |
+**Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
 
 ---
-
-## 4. ETAP 2: KLASYFIKACJA EPIZODÓW CENOWYCH YEARLY
-
-### 4.1 Kategorie biznesowe
-
-Każda wyspa klasyfikowana wg rabatu % w obie strony (60-dniowe okna kontekstowe):
-
-| Kategoria | Kryterium | Liczba | Interpretacja |
-|---|---|---|---|
-| `classic_promo` | rabat 10–45% vs before I after | 13 | Klasyczna kampania promocyjna |
-| `fomo` | rabat 10–45% vs after, <10% vs before | 2 | Ostatnia szansa przed podwyżką |
-| `grandfathering` | rabat >50% w którąkolwiek stronę | 3 | Zamrożona cena starego klienta |
-| `price_hike` | rabat ujemny (cena wyższa niż kotwica) | 4 | Marker zmiany cennika |
-| `uncertain` | NULL w before lub after | 2 | Edge case startu/końca danych |
-| `noise` | rabat 46–50% bez kontekstu legacy | 1 | Wyspa cenowa bez czytelnej kategorii |
-
-**RAZEM: 25 wysp yearly** w okresie 2023-11 do 2026-03.
-
-### 4.2 Pełna lista epizodów yearly
-
-| Kategoria | Data | Cena | Rabat % | Klienci | Czas trwania (dni) |
-|---|---|---|---|---|---|
-| uncertain | 2023-11-05 | 801 | NULL/19.1 | 2 | 0 |
-| uncertain | 2023-11-05 | 756.50 | NULL/23.6 | 4 | 1 |
-| price_hike | 2023-11-06 | 890 | -11.1/10.1 | 4 | 4 |
-| classic_promo | 2024-01-03 | 890 | 10.1/10.1 | 6 | 4 |
-| price_hike | 2024-06-19 | 1 490 | -50.5/-65.4 | 3 | 0 |
-| price_hike | 2024-09-01 | 1 799 | -99.7/0.0 | 7 | 7 |
-| classic_promo | 2024-09-08 | 1 599 | 11.1/11.1 | 3 | 0 |
-| grandfathering | 2024-11-05 | 801 | 55.5/49.9 | 2 | 0 |
-| grandfathering | 2024-11-05 | 756.50 | 57.9/52.7 | 2 | 0 |
-| **classic_promo** | **2024-11-25** | **999** | **44.5/44.5** | **23** | **8** |
-| **classic_promo** | **2025-01-06** | **999** | **37.5/44.5** | **18** | **8** |
-| noise | 2025-03-12 | 959.20 | 46.7/46.7 | 2 | 0 |
-| classic_promo | 2025-03-12 | 1 139.05 | 36.7/36.7 | 3 | 0 |
-| classic_promo | 2025-03-14 | 1 199 | 33.4/19.5 | 8 | 4 |
-| classic_promo | 2025-05-25 | 1 099 | 26.2/26.2 | 20 | 14 |
-| classic_promo | 2025-05-31 | 1 022.07 | 31.4/31.4 | 2 | 0 |
-| **fomo** | **2025-08-19** | **1 490** | **0.0/25.5** | **23** | **20** |
-| fomo | 2025-09-08 | 1 415.50 | 5.0/29.2 | 2 | 0 |
-| classic_promo | 2025-10-16 | 1 699.15 | 15.0/15.0 | 3 | 0 |
-| grandfathering | 2025-11-05 | 801 | 59.9/59.9 | 2 | 0 |
-| classic_promo | 2025-11-22 | 1 499 | 25.0/25.0 | 12 | 9 |
-| classic_promo | 2026-01-14 | 1 299 | 35.0/37.8 | 13 | 5 |
-| classic_promo | 2026-03-19 | 1 329.05 | 33.5/26.1 | 3 | 1 |
-| classic_promo | 2026-03-20 | 1 399 | 30.0/22.2 | 10 | 4 |
-| price_hike | 2026-03-20 | 2 089.05 | -4.5/-16.1 | 2 | 0 |
-
-### 4.3 Wnioski o strukturze cen yearly
-
-**Maksymalny rabat KDS: 44.5%** (Black Friday 2024, New Year 2025 — oba 999 zł od kotwicy 1 799 zł).
-
-**Wzorzec mnożników rabatowych:** ceny rabatowe są policzalne od cen katalogowych z mnożnikami 0.8 / 0.85 / 0.9. Przykłady:
-- 75.65 = 89 × 0.85 (rabat 15% miesięczny)
-- 79.20 = 99 × 0.80 (rabat 20%)
-- 871.20 = 1089 × 0.80 (rabat 20% roczny)
-
----
-
 ## 5. ETAP 3: SYGNATURA STRATEGII CENOWEJ KDS
 
 ### 5.1 Obserwacja kluczowa
@@ -192,63 +117,32 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 ### 5.3 Konsekwencje dla analizy
 
-- Sztywne granice er (2024-09-01, 2025-10-01) wyznaczone przez yearly są **dokładne** dla yearly, **umowne** dla monthly_sub.
+- Sztywne granice er (2024-09-08, 2025-09-08) wyznaczone przez yearly są **dokładne** dla yearly, **umowne** dla monthly_sub.
 - Akwizycja nowych klientów monthly nie pokrywa się jeden-do-jeden z erą cenową — klient może nadal płacić 'starą' cenę w nowej erze.
 
 ---
 
 ## 6. ETAP 4: AKWIZYCJA KLIENTÓW W OKRESACH PROMOCJI
 
-### 6.1 Tabela: pozyskanie klientów per wyspa promocyjna yearly
-
-Dla 15 wysp typu `classic_promo` lub `fomo`:
-
-| Data początkowa | Data końcowa | Dni | Cena | Rabat | Pozyskani yearly | Przychód yearly | Pozyskani monthly | Przychód monthly |
-|---|---|---|---|---|---|---|---|---|
-| 2024-01-03 | 2024-01-07 | 5 | 890 | 10.1% | 6 | 5 340.00 | 9 | 801.00 |
-| 2024-09-08 | 2024-09-08 | 1 | 1 599 | 11.1% | 3 | 4 797.00 | 29 | 4 824.95 |
-| **2024-11-25** | 2024-12-02 | 8 | 999 | **44.5%** | **22** | **21 978.00** | 13 | 2 291.20 |
-| 2025-01-06 | 2025-01-13 | 8 | 999 | 44.5% | 18 | 17 982.00 | 13 | 2 197.00 |
-| 2025-03-12 | 2025-03-12 | 1 | 1 139.05 | 36.7% | 3 | 3 417.15 | 3 | 490.10 |
-| 2025-03-14 | 2025-03-17 | 4 | 1 199 | 33.4% | 7 | 8 393.00 | 6 | 963.30 |
-| 2025-05-25 | 2025-06-08 | 15 | 1 099 | 26.2% | 18 | 19 782.00 | 27 | 4 437.94 |
-| 2025-05-31 | 2025-05-31 | 1 | 1 022.07 | 31.4% | 2 | 2 044.14 | 1 | 160.55 |
-| **2025-08-19** | **2025-09-08** | **21** | **1 490 (fomo)** | **25.5%** | **22** | **32 780.00** | **48** | **9 273.40** |
-| 2025-09-08 | 2025-09-08 | 1 | 1 415.50 | 29.2% | 2 | 2 831.00 | 13 | 2 507.40 |
-| 2025-10-16 | 2025-10-16 | 1 | 1 699.15 | 15.0% | 3 | 5 097.45 | 3 | 634.95 |
-| 2025-11-22 | 2025-12-01 | 10 | 1 499 | 25.0% | 12 | 17 988.00 | 31 | 6 045.62 |
-| 2026-01-14 | 2026-01-19 | 6 | 1 299 | 37.8% | 12 | 15 588.00 | 20 | 3 870.55 |
-| 2026-03-19 | 2026-03-20 | 2 | 1 329.05 | 33.5% | 3 | 3 987.15 | 5 | 1 062.15 |
-| 2026-03-20 | 2026-03-24 | 5 | 1 399 | 30.0% | 8 | 11 192.00 | 18 | 3 898.20 |
-
-**Podsumowanie 15 wysp:**
-
-| Segment | Pozyskani | Przychód (zł) |
-|---|---|---|
-| yearly | 141 | 173 196.89 |
-| monthly | 239 | 43 458.31 |
-| **RAZEM** | **380** | **216 655.20** |
-
-### 6.2 Wnioski o akwizycji
-
-**Wniosek A1 — efekt halo:** akwizycja monthly w dni promocji yearly jest **3.34x większa** niż w dni nie-promocyjne (2.57 vs 0.77 nowych klientów monthly per dzień). 11% dni (promocyjnych) generuje 29% wszystkich nowych klientów monthly.
-
-**Wniosek A2 — promocje yearly są przede wszystkim narzędziem akwizycyjnym:** 94.6% transakcji na cenę promocyjną pochodzi od nowych klientów (141 z 149 transakcji). Tylko 5.4% to odnowienia.
-
-**Wniosek A3 — wartość kohort:** 80% przychodu z promocji generują klienci yearly (173k vs 43k zł), mimo że stanowią 37% kohorty. LTV pojedynczego klienta yearly w punkcie pozyskania to ~7x LTV monthly.
-
-**Wniosek A4 — korelacja rabat % vs akwizycja:** Pearson 0.392 (umiarkowana). Większe rabaty przyciągają więcej klientów łącznie, ale efekt jest głównie wynikiem dłuższego trwania promocji (avg 6.83 dnia dla rabatów ≥25% vs 2.33 dla <25%), nie wyższej intensywności per dzień.
-
-**Wniosek A5 — najmocniejsze halo per dzień to jednodniowe promocje:** 1599 zł (29 monthly w 1 dzień), 1415.50 zł (13 monthly w 1 dzień). Skoncentrowana komunikacja marketingowa.
+<img width="882" height="623" alt="image" src="https://github.com/user-attachments/assets/ac35c3e4-8bcb-452c-bfda-69c2fee16228" />
 
 ---
 
 ## 7. ETAP 5: RETENCJA KOHORTOWA
 
+NOWI klienci pozyskani w PROMOCJI
+<img width="825" height="593" alt="image" src="https://github.com/user-attachments/assets/4b99fcd8-735c-4b6a-90b5-96d2e51c2218" />
+
+NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
+<img width="825" height="594" alt="image" src="https://github.com/user-attachments/assets/de2bec28-cd29-490d-9c94-6f2c7ca29477" />
+
 ### 7.1 Definicje kohort
 
-- **`new_in_promo_day`** — klient, którego pierwsza transakcja nastąpiła w oknie wyspy promocyjnej yearly (dla yearly: także po cenie wyspy)
-- **`organic`** — wszyscy pozostali
+- **`new_in_promo_day`** — klient, którego pierwsza transakcja nastąpiła w dniu promocjii.
+  Obsługiwane przypadki:
+- klient z segmentu organic, który przerwał subskrypcję i odnowił ją w dniu promocji
+- klient z segmentu organic, który zmienił plan z monthly na yearly w dniu promocji
+- **`organic`** — klient, którego pierwsza transakcja nastąpiła w dniu innym niż poromocyjnym
 
 ### 7.2 Retencja monthly_sub
 
