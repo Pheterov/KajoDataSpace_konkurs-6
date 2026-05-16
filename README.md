@@ -13,8 +13,7 @@
 1. [Pytanie badawcze](#1-pytanie-badawcze)
 2. [Metodologia — przegląd](#2-metodologia--przegląd)
 3. [Etap 1: Mapowanie krajobrazu cenowego](#3-etap-1-mapowanie-krajobrazu-cenowego)
-4. [Etap 4: Akwizycja klientów w okresach promocji](#6-etap-4-akwizycja-klientów-w-okresach-promocji)
-5. [Etap 5: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
+5. [Etap 2: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
 
 ---
 
