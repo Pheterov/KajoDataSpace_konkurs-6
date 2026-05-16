@@ -34,7 +34,7 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 ## 2. METODOLOGIA — PRZEGLĄD
 
-<img width="680" height="624" alt="image" src="https://github.com/user-attachments/assets/d0d9feba-a47d-4ce3-9071-ecdb91c29cd9" />
+<img width="838" height="643" alt="image" src="https://github.com/user-attachments/assets/f1881efa-ac42-4127-9802-09963c16797d" />
 
 Analiza została podzielona na pięć etapów:
 
