@@ -4,7 +4,7 @@
 **Autor:** Piotr Rzepka  
 **Stack:** MySQL 8+ (kwerendy), DuckDB (walidacja)  
 **Zakres danych:** 2023-11-05 do 2026-03-31, 4 227 transakcji, 1 057 unikalnych klientów  
-**Wersja dokumentu:** 03.05.2026
+**Wersja dokumentu:** 16.05.2026
 
 ---
 
@@ -18,9 +18,6 @@
 6. [Etap 4: Akwizycja klientów w okresach promocji](#6-etap-4-akwizycja-klientów-w-okresach-promocji)
 7. [Etap 5: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
 8. [Etap 6: Wpływ podwyżek na retencję](#8-etap-6-wpływ-podwyżek-na-retencję)
-9. [Wnioski końcowe](#9-wnioski-końcowe)
-10. [Definicje](#10-definicje)
-11. [Kod SQL — pełne kwerendy](#11-kod-sql--pełne-kwerendy)
 
 ---
 
