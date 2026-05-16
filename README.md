@@ -130,7 +130,7 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 ## 7. ETAP 5: RETENCJA KOHORTOWA
 
-NOWI klienci pozyskani w PROMOCJI
+NOWI klienci pozyskani w DNIU PROMOCJI
 <img width="825" height="593" alt="image" src="https://github.com/user-attachments/assets/4b99fcd8-735c-4b6a-90b5-96d2e51c2218" />
 
 NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
