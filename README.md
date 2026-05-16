@@ -34,6 +34,8 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 ## 2. METODOLOGIA — PRZEGLĄD
 
+<img width="680" height="624" alt="image" src="https://github.com/user-attachments/assets/d0d9feba-a47d-4ce3-9071-ecdb91c29cd9" />
+
 Analiza została podzielona na sześć etapów:
 
 1. **Mapowanie krajobrazu cenowego** — identyfikacja promocji na podstawie wzorców cenowych
