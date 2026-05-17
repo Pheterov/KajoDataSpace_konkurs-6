@@ -83,7 +83,8 @@ oferuje kilkudniowe zniżki dla społeczności innych twórców.
 
 ### 3.3 Trzy ery cenowe
 
-Granice er wyznaczone przez zmiany ceny katalogowej yearly:
+Granice er wyznaczone przez zmiany ceny katalogowej yearly:  
+**Pionowe przerywane linie** - wskazują granice Er cenowych
 
 | Era | Okres | Cena katalogowa yearly | Cena katalogowa monthly |
 |---|---|---|---|
@@ -91,13 +92,11 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 | **Era 2** | 2024-09-09 do 2025-09-08 | 1 799 zł | 169 zł |
 | **Era 3** | 2025-09-09 do 2026-03-31 | 1 999 zł | 199 zł |
 
-<img width="1036" height="635" alt="image" src="https://github.com/user-attachments/assets/58af269c-a860-4f79-b45e-625fc2232174" />
+<img width="1036" height="635" alt="image" src="https://github.com/user-attachments/assets/58af269c-a860-4f79-b45e-625fc2232174" />  
 
 **Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
 
-<img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />
-
-**Pionowe przerywane linie** - wskazują granice Er cenowych
+<img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />  
 
 <img width="979" height="523" alt="image" src="https://github.com/user-attachments/assets/d908653b-dcc7-412f-b633-6e6295d34403" />
 
