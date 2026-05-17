@@ -84,13 +84,14 @@ oferuje kilkudniowe zniżki dla społeczności innych twórców.
 ### 3.3 Trzy ery cenowe
 
 Granice er wyznaczone przez zmiany ceny katalogowej yearly:  
-**Pionowe przerywane linie** - wskazują granice Er cenowych
 
 | Era | Okres | Cena katalogowa yearly | Cena katalogowa monthly |
 |---|---|---|---|
 | **Era 1** | 2023-11-05 do 2024-09-08 | ≥690 zł | 99 zł |
 | **Era 2** | 2024-09-09 do 2025-09-08 | 1 799 zł | 169 zł |
-| **Era 3** | 2025-09-09 do 2026-03-31 | 1 999 zł | 199 zł |
+| **Era 3** | 2025-09-09 do 2026-03-31 | 1 999 zł | 199 zł |  
+
+**Pionowe przerywane linie** - wskazują granice Er cenowych  
 
 <img width="1036" height="635" alt="image" src="https://github.com/user-attachments/assets/58af269c-a860-4f79-b45e-625fc2232174" />  
 
