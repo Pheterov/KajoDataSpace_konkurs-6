@@ -31,8 +31,8 @@ Wykres kołowy nie zawsze jest ulubieńcem analityków, ale jako szybkie otwarci
 Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umieszczone w środku pączka oraz na wykresie słupkowym poniżej dodają potrzebny kontekst do samych udziałów procentowych, które bez danych absolutnych potrafią prowadzić do mylnych interpretacji.  
 
 &nbsp;  
-
-<img width="790" height="626" alt="image" src="https://github.com/user-attachments/assets/c29f7188-b883-4228-a6e6-d0f01b8c2f91" />  
+ 
+<img width="867" height="643" alt="image" src="https://github.com/user-attachments/assets/9c22c74c-e61d-4088-bc42-458560301c02" />  
 
 &nbsp;
 
