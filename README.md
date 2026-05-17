@@ -39,7 +39,7 @@ Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umie
 Wykres już na pierwszy rzut oka pokazuje skąd realnie pochodzi większość przychodu firmy. Intuicyjnie można dojść do wniosku, że warto mocniej promować subskrypcję miesięczną — generuje największy udział w sprzedaży i ma najniższy próg wejścia dla nowych klientów.
 Zanim jednak uznamy ją za najbardziej wartościowy produkt, warto już teraz zadać sobie pytanie:  
 **Czy oparcie strategii o akwizycję klientów decydujących się na zakup dostępu rocznego ma szansę byc bardziej dochodowym i 'bezpieczniejszym' ruchem niż skupienie się na użytkownikach z możliwością rezygnacji po pierwszym miesiącu?**  
-Kolejne wykresy pomogą sprawdzić, która strategia faktycznie daje biznesowi większą wartość.
+Kolejne wykresy pomogą sprawdzić jaką strategię aktualnie prowadzi KajoData Space.
 
 Analiza została podzielona na pięć etapów:
 
