@@ -32,7 +32,7 @@ Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umie
 
 &nbsp;  
 
-<img width="820" height="633" alt="image" src="https://github.com/user-attachments/assets/8afacd34-a881-46ad-be44-49ac499a1a09" />  
+<img width="804" height="638" alt="image" src="https://github.com/user-attachments/assets/74ac00a3-47da-4a25-9a96-f2d4452c05d8" />  
 
 &nbsp;
 
