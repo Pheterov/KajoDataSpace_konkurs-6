@@ -27,6 +27,8 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 ## 2. WSTĘPNA DEKOMPOZYCJA PRZYCHODU
 
+Wychodząc na przeciw demonizacji wykresów kołowych używam go do rozpoczęcia case study.  
+
 <img width="838" height="643" alt="image" src="https://github.com/user-attachments/assets/f1881efa-ac42-4127-9802-09963c16797d" />
 
 &nbsp;
