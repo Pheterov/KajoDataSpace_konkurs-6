@@ -31,9 +31,8 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 
 &nbsp;
 
-Wykres już na pierwszy rzut oka pokazuje skąd realnie pochodzi większość przychodu firmy. Intuicyjnie można dojść do wniosku, że warto mocniej promować subskrypcję miesięczną —  
-generuje największy udział w sprzedaży i ma najniższy próg wejścia dla nowych klientów.
-Zanim jednak uznamy ją za najbardziej wartościowy produkt, warto odpowiedzieć sobie na jedno ważne pytanie:  
+Wykres już na pierwszy rzut oka pokazuje skąd realnie pochodzi większość przychodu firmy. Intuicyjnie można dojść do wniosku, że warto mocniej promować subskrypcję miesięczną — generuje największy udział w sprzedaży i ma najniższy próg wejścia dla nowych klientów.
+Zanim jednak uznamy ją za najbardziej wartościowy produkt, warto odpowiedzieć sobie na jedno ważne pytanie: 
 **Czy klient decydujący się na zakup dostępu rocznego jest bardziej dochodowy i 'bezpieczniejszy' niż użytkownik z możliwością rezygnacji po pierwszym miesiącu?**  
 Kolejne wykresy pomogą sprawdzić, która strategia faktycznie daje biznesowi większą wartość.
 
