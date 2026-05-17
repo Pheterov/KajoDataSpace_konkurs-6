@@ -28,8 +28,9 @@ Pytanie zawiera trzy obiekty (promocje / standardowe ceny / podwyżki) i jedną 
 ## 2. WSTĘPNA DEKOMPOZYCJA PRZYCHODU
 
 Wykres kołowy nie zawsze jest ulubieńcem analityków, ale jako szybkie otwarcie mojego case study sprawdza się wyjątkowo dobrze.  
-Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umieszczone w środku pączka dodają potrzebny kontekst do samych udziałów procentowych, które bez danych absolutnych potrafią prowadzić do mylnych interpretacji.
+Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umieszczone w środku pączka dodają potrzebny kontekst do samych udziałów procentowych, które bez danych absolutnych potrafią prowadzić do mylnych interpretacji.  
 
+&nbsp;
 <img width="838" height="643" alt="image" src="https://github.com/user-attachments/assets/f1881efa-ac42-4127-9802-09963c16797d" />
 
 &nbsp;
