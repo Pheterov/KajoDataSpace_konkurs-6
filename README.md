@@ -32,14 +32,15 @@ Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umie
 
 &nbsp;  
  
-<img width="1020" height="651" alt="image" src="https://github.com/user-attachments/assets/c3781eba-fd5a-4898-9af4-99e866bfe176" />  
+<img width="909" height="665" alt="image" src="https://github.com/user-attachments/assets/95b577f5-844c-4e06-b9ff-220712480f92" />
 
 &nbsp;
 
-Wykres już na pierwszy rzut oka pokazuje skąd realnie pochodzi większość przychodu firmy. Intuicyjnie można dojść do wniosku, że warto zainwestować w promowanie subskrypcji miesięcznej — generuje największy udział w sprzedaży i ma najniższy próg wejścia dla nowych klientów.
+Dane są jednoznaczne: subskrypcje miesięczne odpowiadają za 58% przychodu i 71% klientów, podczas gdy roczne generują 39% przychodu przy zaledwie 26% bazy. Oznacza to, że klient z subskrypcją roczną jest wart średnio ~1,9× więcej niż miesięczny w całym analizowanym okresie (2023–2026).
 Zanim jednak uznamy ją za najbardziej wartościowy produkt, warto już teraz zadać sobie pytanie:  
-**Czy oparcie strategii o akwizycję klientów decydujących się na zakup dostępu rocznego ma szansę byc bardziej dochodowym i 'bezpieczniejszym' ruchem niż skupienie się na użytkownikach z możliwością rezygnacji po pierwszym miesiącu?**  
-Kolejne wykresy pomogą sprawdzić jaką strategię aktualnie prowadzi KajoData Space.
+**Czy oparcie strategii o akwizycję klientów decydujących się na zakup dostępu rocznego ma szansę byc bardziej dochodowym i 'bezpieczniejszym' ruchem niż skupienie się na użytkownikach z możliwością rezygnacji po pierwszym miesiącu?**
+**Drugą ważną obserwacją może być nieścisłość w ilości miesięcy**.  
+Dane obejmują pełne 29 miesięcy aktywności — od pierwszej transakcji w listopadzie 2023 do ostatniej w marcu 2026. Nie jest to okrągłe "3 lata", ale właśnie tyle wynosi rzeczywisty czas życia biznesu uchwycony w danych — i tyle liczymy.
 
 Analiza została podzielona na pięć etapów:
 
