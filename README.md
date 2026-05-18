@@ -76,7 +76,7 @@ Cena promocyjna jest mniejsza od ceny katalogowej o % z przedziału 10 - 50
 - 75.65 = 89 × 0.85 (rabat 15% miesięczny)
 - 79.20 = 99 × 0.80 (rabat 20%)
 - 871.20 = 1089 × 0.80 (rabat 20% roczny)
-- 
+ 
 Dzień promocyjny jest dniem w którym dokonano przynajmniej jednego zakupu po cenie promocyjnej
 
 KajoData Space nie stosuje kuponów promocyjnych do wykorzystania w przyszłości, natomiast ze względu na liczne współprace
