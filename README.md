@@ -38,7 +38,7 @@ Przy zaledwie trzech kategoriach pozostaje czytelny, a dodatkowe informacje umie
 
 Dane są jednoznaczne: subskrypcje miesięczne odpowiadają za 58% przychodu i 71% klientów, podczas gdy roczne generują 39% przychodu przy zaledwie 26% bazy. Oznacza to, że klient z subskrypcją roczną jest wart średnio ~1,9× więcej niż miesięczny w całym analizowanym okresie (2023–2026).
 Zanim jednak uznamy ją za najbardziej wartościowy produkt, warto już teraz zadać sobie pytanie:  
-**Czy oparcie strategii o akwizycję klientów decydujących się na zakup dostępu rocznego ma szansę byc bardziej dochodowym i 'bezpieczniejszym' ruchem niż skupienie się na użytkownikach z możliwością rezygnacji po pierwszym miesiącu?**
+**Czy oparcie strategii o akwizycję klientów decydujących się na zakup dostępu rocznego ma szansę byc bardziej dochodowym i 'bezpieczniejszym' ruchem niż skupienie się na użytkownikach z możliwością rezygnacji po pierwszym miesiącu?**  
 **Drugą ważną obserwacją może być nieścisłość w ilości miesięcy**.  
 Dane obejmują pełne 29 miesięcy aktywności — od pierwszej transakcji w listopadzie 2023 do ostatniej w marcu 2026. Nie jest to okrągłe "3 lata", ale właśnie tyle wynosi rzeczywisty czas życia biznesu uchwycony w danych — i tyle liczymy.
 
