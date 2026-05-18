@@ -88,7 +88,7 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
 | Era | Okres | Cena katalogowa yearly | Cena katalogowa monthly |
 |---|---|---|---|
-| **Era 1** | 2023-11-05 do 2024-09-08 | ≥690 zł | 99 zł |
+| **Era 1** | 2023-11-05 do 2024-09-08 | ≥990 zł | 99 zł |
 | **Era 2** | 2024-09-09 do 2025-09-08 | 1 799 zł | 169 zł |
 | **Era 3** | 2025-09-09 do 2026-03-31 | 1 999 zł | 199 zł |  
 
