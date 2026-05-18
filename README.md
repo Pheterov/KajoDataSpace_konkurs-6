@@ -94,11 +94,29 @@ Granice er wyznaczone przez zmiany ceny katalogowej yearly:
 
 **Pionowe przerywane linie** - wskazują granice Er cenowych  
 
-<img width="1036" height="635" alt="image" src="https://github.com/user-attachments/assets/58af269c-a860-4f79-b45e-625fc2232174" />  
+Wykres pokazuje coś więcej niż wzrost — pokazuje jak biznes subskrypcyjny kumuluje wartość w czasie. Słupki to akwizycja, linie to zasób. W modelu subskrypcyjnym obie miary są równie krytyczne: pozyskanie bez retencji to dziurawy wiadro, retencja bez pozyskania to stagnacja. Tu obie rosną równocześnie — baza aktywnych klientów miesięcznych wzrosła z 61 w listopadzie 2023 do 209 w marcu 2026, bez żadnego trwałego cofnięcia między erami.
+Wrzesień jest systematycznie najsilniejszym miesiącem, to nie zbieżność — to weryfikowalny, powtarzalny efekt kampanii FOMO poprzedzającej podwyżkę cen. Mechanizm działa, a jego skuteczność rośnie.
+Osobną uwagę wymaga marzec 2026 z rekordem 58 klientów jednorazowych. Liczba ta nie odzwierciedla realnego zachowania — ze względu na right-censoring dataset kończy się przed upływem czasu potrzebnego do odnowienia subskrypcji zakupionej w marcu. Obserwujemy akwizycję, nie decyzję o retencji.
+Pytanie biznesowe, na które odpowiada wykres: Czy baza klientów rośnie strukturalnie, czy jedynie rotuje? Dane potwierdzają wzrost strukturalny.  
 
-**Era 2 to dominujący okres akwizycyjny** — 53% wszystkich pozyskanych klientów - była też jednocześnie NAJDŁUŻEJ TRWAJĄCĄ ERĄ cenową.
+<img width="1214" height="680" alt="image" src="https://github.com/user-attachments/assets/fc78c111-7531-4b36-bae9-8b06ae2c9efa" />   
+
+Następny krok: Skoro klientów systematycznie przybywa, a wrzesień koncentruje szczytową akwizycję — warto sprawdzić, czy ten wzrost przekłada się proporcjonalnie na przychód i w którym segmencie generowana jest największa wartość.  
+
+
+Porównanie er wymaga wyjaśnienia metodologicznego, bo standardowe year-over-year byłoby tu błędem — ery mają różną długość. Przyjęta metoda zestawia identyczne okna czasowe liczone od daty startu każdej ery. Era 3 trwa od 9 września 2025 do 31 marca 2026 — punkt odniesienia to dokładnie 9 września 2024 – 31 marca 2025 z Ery 2. To jedyna uczciwa metoda porównania. Wynik: 389 928 zł wobec 227 733 zł — wzrost o 71,2%.
+Wrzesień wyróżnia się strukturalnie: 43 144 zł w 2024 i 77 666 zł w 2025, przy czym subskrypcje roczne stanowiły ponad 55% przychodu w obu przypadkach.  
+Pytanie biznesowe, na które odpowiada wykres: Czy podwyżki cen hamują wzrost bazy klientów? Dane temu przeczą — każda era przynosi więcej klientów przy wyższych cenach, a ARPU rośnie z 533 zł w Erze 1 do 794 zł w Erze 2 bez spadku wolumenu.  
 
 <img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />  
+
+Następny krok: Wiemy skąd pochodzi wzrost przychodów i kiedy jest największy. Pozostaje otwarte pytanie o jego trwałość — czy klienci pozyskani w oknie promocyjnym, którzy w dużej mierze napędzają te wyniki, faktycznie zostają na dłużej?
+
+Liczby są jednoznaczne i mocniejsze niż mogłoby się wydawać. Klienci pozyskani w dniu promocji to 53.8% bazy (569 z 1 057), ale generują 72.2% przychodu (752 310 zł z 1 042 515 zł). Każdy promocyjny złoty pracuje 1.3x mocniej niż złoty od klienta organic — pozorny paradoks rozwiązuje się tym, że promocje skutecznie pozyskują klientów do droższego segmentu (yearly), gdzie LTV jest fundamentalnie wyższe.
+W yearly mechanizm jest jeszcze ostrzejszy. 84.4% całego przychodu z subskrypcji rocznych pochodzi od klientów pozyskanych w promocji (347 tys zł z 411 tys zł). Promocja w KDS nie jest "bramą do tańszego produktu" — jest główną i niemal jedyną ścieżką sprzedaży najdroższego planu. Yearly w dni niezwiązane z promocją sprzedaje się w marginalny sposób.
+Klienci pozyskani we wrześniu 2025 (kampania FOMO 1490 zł) widoczni są w przychodzie aż do marca 2026 — sześć kolejnych miesięcy ciągłej subskrypcji. To dowód że promocje kreują trwałą wartość, nie jednorazowy spike.
+Retencja per segment monthly (po wykluczeniu tenure bias): klienci PROMO mają wyższy odsetek lojalnych (74.6% vs 67.0% u organic). Yearly nie pozwala wyciągać silnych wniosków statystycznych z powodu zbyt małej próbki spontanicznej (n=27 po cutoffie 25.03.2025).
+Metodologia wykrywania dni promocyjnych opiera się na sygnałach z transakcji yearly: dzień klasyfikowany jako promocyjny, jeśli zawiera transakcję yearly poniżej ceny katalogowej obowiązującej w danej Erze (Era 1: 990 zł, Era 2: 1 799 zł, Era 3: 1 999 zł) — z wykluczeniem grandfathered (klienci płacący starą cenę z poprzedniej Ery, np. 990 zł w Erze 2). Rezultat: 142 dni promocyjnych z 879 dni działalności KDS. Lista uzupełniona o 19 zweryfikowanych i potwierdzonych dat z social mediów, z czego 12 zostało niezależnie wykrytych algorytmicznie — co potwierdza solidność metody. Świadomie pomijamy ślady promocji monthly, ponieważ w danych transakcyjnych nie mają one charakterystycznej sygnatury cenowej (klienci monthly w dni kampanii płacą cenę katalogową, korzystając z efektu halo wokół promocji yearly).  
 
 <img width="979" height="523" alt="image" src="https://github.com/user-attachments/assets/d908653b-dcc7-412f-b633-6e6295d34403" />
 
