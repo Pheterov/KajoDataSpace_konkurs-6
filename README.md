@@ -155,7 +155,13 @@ Yearly i monthly_sub wykazują **fundamentalnie różne wzorce** wprowadzania no
 
 ## 5. ETAP 3: AKWIZYCJA KLIENTÓW W OKRESACH PROMOCJI
 
-<img width="882" height="623" alt="image" src="https://github.com/user-attachments/assets/ac35c3e4-8bcb-452c-bfda-69c2fee16228" />
+<img width="882" height="623" alt="image" src="https://github.com/user-attachments/assets/ac35c3e4-8bcb-452c-bfda-69c2fee16228" />  
+
+Wykres prezentuje wyłącznie pozyskania w segmencie miesięcznym (918 klientów w 29 miesiącach) — nowi klienci oraz powroty po przerwie >32 dni. Zgodnie z naszą metodologią klient zaliczony do "promocji" to ten, który zarejestrował pierwszą lub powrotną transakcję w jednym ze 142 zidentyfikowanych dni promocyjnych.
+Trzy obserwacje, które zmieniają sposób patrzenia na kampanie:
+Wrzesień 2025 (FOMO przed Erą 3): 47 promo vs 19 spontanicznych — odwrócenie zwykłej proporcji. W tym jednym miesiącu kampania wygenerowała 71% akwizycji. Identyczny mechanizm we wrześniu 2024 (39/45).
+Listopad 2025 (Black Week): 28 promo vs 27 spontanicznych — perfekcyjny remis. Kampania podwoiła baseline akwizycji listopadowej (~14/m-c) bez kanibalizacji organicznego ruchu.
+W pozostałych miesiącach pozyskanie spontaniczne dominuje. Kampanie nie zastępują naturalnego pipeline'u.
 
 ---
 
