@@ -176,7 +176,12 @@ Lipiec i sierpień 2024 są puste — to jedyne dwa miesiące w historii KDS bez
 Wrzesień 2025 wygląda tragicznie. Najsilniejsza akwizycja w historii KDS (47 klientów promo, więcej niż wrzesień 2024) — i jednocześnie najszybszy spadek krzywej. Po 6 miesiącach zostało 32%, krzywa pikuje pionowo. Okno 12M zamyka się dopiero we wrześniu 2026, ale sygnał wczesny jest jednoznaczny: ta kohorta nie zachowuje się jak poprzednie. Hipoteza: kampania FOMO 1490 zł kanibalizowała sama siebie — klient, który widział "ostatnia szansa przed podwyżką", kupił monthly jako tańszą alternatywę dla yearly i odszedł, gdy "ostatnia szansa" minęła.
 
 NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI - 544 klientów
-<img width="904" height="632" alt="image" src="https://github.com/user-attachments/assets/86ebfea1-e816-49ff-b9f7-ad1a5f7bbd56" />
+<img width="904" height="632" alt="image" src="https://github.com/user-attachments/assets/86ebfea1-e816-49ff-b9f7-ad1a5f7bbd56" />  
+
+Wykres prezentuje wyłącznie klientów, którzy weszli do KDS w dni nie-promocyjne — porównawcze odbicie poprzedniego wykresu.
+Spontaniczne kohorty są mniejsze, ale stabilniejsze w długim horyzoncie. Średnia retencja 12M wynosi 22% dla spontanicznych vs 14% dla promocyjnych. Klient, który dołączył do KDS bez bodźca cenowego, zostaje dłużej niż klient pozyskany kampanią.
+Wzorzec spadku jest też inny. Promocyjne kohorty startują wysoko (często 80-90% w 1M) i pikują pionowo. Spontaniczne startują niżej (60-80%) i opadają łagodniej. To dwa różne profile klientów — promocyjny robi szybką decyzję pod presją czasu i równie szybko ją rewiduje; spontaniczny waha się dłużej, ale zostaje konsekwentniej.
+Wniosek strategiczny: promocja generuje wolumen i przychód jednorazowy. Spontaniczne pozyskanie generuje lojalność i długoterminowy LTV. Oba kanały są potrzebne — ale w innym celu i z innymi metrykami sukcesu.
 
 ### 7 Definicje kohort
 
