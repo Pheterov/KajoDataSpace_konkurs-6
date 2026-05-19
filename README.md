@@ -105,7 +105,7 @@ Następny krok: Skoro klientów systematycznie przybywa, a wrzesień koncentruje
 
 <img width="1069" height="536" alt="image" src="https://github.com/user-attachments/assets/d6c7da35-cdc8-4140-93aa-349ac1e2c2da" />  
 
-Porównanie er wymaga wyjaśnienia metodologicznego, bo standardowe year-over-year byłoby tu błędem — ery mają różną długość. Przyjęta metoda zestawia identyczne okna czasowe liczone od daty startu każdej ery. Era 3 trwa od 9 września 2025 do 31 marca 2026 — punkt odniesienia to dokładnie 9 września 2024 – 31 marca 2025 z Ery 2. To jedyna uczciwa metoda porównania. Wynik: 389 928 zł wobec 227 733 zł — wzrost o 71,2%.
+Porównanie er wymaga wyjaśnienia metodologicznego, bo standardowe year-over-year byłoby tu błędem — ery mają różną długość. Przyjęta metoda zestawia identyczne okna czasowe liczone od daty startu każdej ery. Era 3 trwa od 9 września 2025 do 31 marca 2026 — punkt odniesienia to dokładnie 9 września 2024 – 31 marca 2025 z Ery 2. To jedyna uczciwa metoda porównania.
 Wrzesień wyróżnia się strukturalnie: 43 144 zł w 2024 i 77 666 zł w 2025, przy czym subskrypcje roczne stanowiły ponad 55% przychodu w obu przypadkach.  
 Pytanie biznesowe, na które odpowiada wykres: Czy podwyżki cen hamują wzrost bazy klientów? Dane temu przeczą — każda era przynosi więcej klientów przy wyższych cenach, a ARPU rośnie z 533 zł w Erze 1 do 794 zł w Erze 2 bez spadku wolumenu.  
 
