@@ -161,7 +161,6 @@ Wykres prezentuje wyłącznie pozyskania w segmencie miesięcznym (918 klientów
 Trzy obserwacje, które zmieniają sposób patrzenia na kampanie:
 Wrzesień 2025 (FOMO przed Erą 3): 47 promo vs 19 spontanicznych — odwrócenie zwykłej proporcji. W tym jednym miesiącu kampania wygenerowała 71% akwizycji. Identyczny mechanizm we wrześniu 2024 (39/45).
 Listopad 2025 (Black Week): 28 promo vs 27 spontanicznych — perfekcyjny remis. Kampania podwoiła baseline akwizycji listopadowej (~14/m-c) bez kanibalizacji organicznego ruchu.
-W pozostałych miesiącach pozyskanie spontaniczne dominuje. Kampanie nie zastępują naturalnego pipeline'u.
 
 ---
 
