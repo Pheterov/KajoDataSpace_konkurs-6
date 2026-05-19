@@ -171,7 +171,7 @@ NOWI klienci pozyskani w DNIU PROMOCJI - 374 klientów
 
 Wykres prezentuje wyłącznie klientów pozyskanych w dni promocyjne — śledzi, czy promocja kupuje klienta na chwilę, czy na lata.
 Horyzont retencji ograniczamy do 12 miesięcy świadomie. KDS to platforma e-learningowa, a 12 miesięcy w zupełności wystarcza osobie zdecydowanej na przebranżowienie do wyczerpania dostępnego materiału. Dłuższa retencja byłaby anomalią produktową, nie celem biznesowym — klient, który zostaje na drugi rok, opłaca powtórki, nie naukę.
-Promocja nie jest jednorazową transakcją — buduje aktywa. Kohorty z maja i września 2024 po 12 miesiącach trzymają retencję odpowiednio połowy i jednej trzeciej startowej bazy. Klient pozyskany w kampanii dwa lata temu wciąż płaci dziś.
+Promocja nie jest jednorazową transakcją — buduje aktywa. Kohorty z maja i września 2024 po 12 miesiącach trzymają retencję odpowiednio połowy i jednej trzeciej startowej bazy.
 Lipiec i sierpień 2024 są puste — to jedyne dwa miesiące w historii KDS bez ani jednego pozyskania w promocji. Brak nie wynika ze słabości kanału, tylko z pauzy kampanijnej przed startem Ery 2. Kolejne wakacje (2025) już wyglądają normalnie.
 Wrzesień 2025 wygląda tragicznie. Najsilniejsza akwizycja w historii KDS (47 klientów promo, więcej niż wrzesień 2024) — i jednocześnie najszybszy spadek krzywej. Po 6 miesiącach zostało 32%, krzywa pikuje pionowo. Okno 12M zamyka się dopiero we wrześniu 2026, ale sygnał wczesny jest jednoznaczny: ta kohorta nie zachowuje się jak poprzednie. Hipoteza: kampania FOMO 1490 zł kanibalizowała sama siebie — klient, który widział "ostatnia szansa przed podwyżką", kupił monthly jako tańszą alternatywę dla yearly i odszedł, gdy "ostatnia szansa" minęła.
 
