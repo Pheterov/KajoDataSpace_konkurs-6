@@ -167,7 +167,13 @@ Listopad 2025 (Black Week): 28 promo vs 27 spontanicznych — perfekcyjny remis.
 ## 6. ETAP 4: RETENCJA KOHORTOWA
 
 NOWI klienci pozyskani w DNIU PROMOCJI
-<img width="930" height="636" alt="image" src="https://github.com/user-attachments/assets/8de1303a-cce0-4610-9ac6-1759e2f1b0c1" />
+<img width="930" height="636" alt="image" src="https://github.com/user-attachments/assets/8de1303a-cce0-4610-9ac6-1759e2f1b0c1" />  
+
+Wykres prezentuje wyłącznie klientów pozyskanych w dni promocyjne — śledzi, czy promocja kupuje klienta na chwilę, czy na lata.
+Horyzont retencji ograniczamy do 12 miesięcy świadomie. KDS to platforma e-learningowa, a 12 miesięcy w zupełności wystarcza osobie zdecydowanej na przebranżowienie do wyczerpania dostępnego materiału. Dłuższa retencja byłaby anomalią produktową, nie celem biznesowym — klient, który zostaje na drugi rok, opłaca powtórki, nie naukę.
+Promocja nie jest jednorazową transakcją — buduje aktywa. Kohorty z maja i września 2024 po 12 miesiącach trzymają retencję odpowiednio połowy i jednej trzeciej startowej bazy. Klient pozyskany w kampanii dwa lata temu wciąż płaci dziś.
+Lipiec i sierpień 2024 są puste — to jedyne dwa miesiące w historii KDS bez ani jednego pozyskania w promocji. Brak nie wynika ze słabości kanału, tylko z pauzy kampanijnej przed startem Ery 2. Kolejne wakacje (2025) już wyglądają normalnie.
+Wrzesień 2025 wygląda tragicznie. Najsilniejsza akwizycja w historii KDS (47 klientów promo, więcej niż wrzesień 2024) — i jednocześnie najszybszy spadek krzywej. Po 6 miesiącach zostało 32%, krzywa pikuje pionowo. Okno 12M zamyka się dopiero we wrześniu 2026, ale sygnał wczesny jest jednoznaczny: ta kohorta nie zachowuje się jak poprzednie. Hipoteza: kampania FOMO 1490 zł kanibalizowała sama siebie — klient, który widział "ostatnia szansa przed podwyżką", kupił monthly jako tańszą alternatywę dla yearly i odszedł, gdy "ostatnia szansa" minęła.
 
 NOWI klienci pozyskani POZA DNIAMI PROMOCYJNYMI
 <img width="904" height="632" alt="image" src="https://github.com/user-attachments/assets/86ebfea1-e816-49ff-b9f7-ad1a5f7bbd56" />
