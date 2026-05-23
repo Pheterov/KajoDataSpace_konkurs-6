@@ -11,7 +11,7 @@
 ## SPIS TREŚCI
 
 1. [Pytanie badawcze](#1-pytanie-badawcze)
-2. [Metodologia — przegląd](#2-metodologia--przegląd)
+2. [Wstępna dekompozycja przychodu](#2-wstępna--dekompozycja--przychodu)
 3. [Etap 1: Mapowanie krajobrazu cenowego](#3-etap-1-mapowanie-krajobrazu-cenowego)
 5. [Etap 2: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
 
