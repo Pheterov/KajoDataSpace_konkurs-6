@@ -6,17 +6,6 @@
 **Zakres danych:** 2023-11-05 do 2026-03-31, 4 227 transakcji, 1 057 unikalnych klientów  
 **Wersja dokumentu:** 18.05.2026
 
----
-
-## SPIS TREŚCI
-
-1. [Pytanie badawcze](#1-pytanie-badawcze)
-2. [Wstępna dekompozycja przychodu](#2-wstępna--dekompozycja--przychodu)
-3. [Etap 1: Mapowanie krajobrazu cenowego](#3-etap-1-mapowanie-krajobrazu-cenowego)
-5. [Etap 2: Retencja kohortowa](#7-etap-5-retencja-kohortowa)
-
----
-
 ## 1. PYTANIE BADAWCZE
 
 > *„Jak promocje, standardowe ceny i podwyżki wpływają na retencję klientów / nowych klientów? Jest ich mniej? Więcej? Odchodzą szybciej?"*
